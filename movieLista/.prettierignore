@@ -1,0 +1,5 @@
+node_modules/
+dist/
+charts/
+.github/
+src/routeTree.gen.ts

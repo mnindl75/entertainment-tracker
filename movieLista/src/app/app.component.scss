@@ -1,0 +1,31 @@
+.app-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    border-bottom: 1px solid #ddd;
+}
+
+.brand {
+    font-weight: 700;
+}
+
+.nav {
+    display: flex;
+    gap: 12px;
+
+    a {
+        text-decoration: none;
+        padding: 6px 10px;
+        border-radius: 8px;
+    }
+
+    a.active {
+        font-weight: 600;
+        text-decoration: underline;
+    }
+}
+
+.app-content {
+    padding: 16px;
+}
