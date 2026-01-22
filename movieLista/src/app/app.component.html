@@ -1,17 +1,17 @@
-<header class="app-header">
-    <div class="brand">Movie Tracker</div>
+<mat-toolbar>
+    <span>Movie Tracker</span>
+    <span class="spacer"></span>
 
-    <nav class="nav">
-        <a
-            routerLink="/search"
-            routerLinkActive="active"
-            [routerLinkActiveOptions]="{ exact: true }"
-            >Search</a
-        >
-        <a routerLink="/library" routerLinkActive="active">Library</a>
-    </nav>
-</header>
+    <a
+        mat-button
+        routerLink="/search"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        >Search
+    </a>
+    <a mat-button routerLink="/library" routerLinkActive="active">Library</a>
+</mat-toolbar>
 
-<main class="app-content">
+<main class="content">
     <router-outlet />
 </main>
