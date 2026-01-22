@@ -1,15 +1,7 @@
-import { Component, signal } from '@angular/core';
+import { Component, DestroyRef, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import {
-    catchError,
-    debounceTime,
-    distinctUntilChanged,
-    filter,
-    of,
-    switchMap,
-    tap,
-} from 'rxjs';
+import { catchError, debounceTime, distinctUntilChanged, filter, of, switchMap, tap } from 'rxjs';
 
 import { MovieApiService, OmdbSearchItem } from '../../core/movie-api.service';
 
@@ -18,6 +10,8 @@ import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
     selector: 'app-search',
@@ -30,6 +24,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
         MatInputModule,
         MatAutocompleteModule,
         MatProgressSpinnerModule,
+        MatButtonModule,
     ],
     templateUrl: './search.component.html',
     styleUrl: './search.component.scss',
@@ -40,6 +35,7 @@ export class SearchComponent {
     loading = signal(false);
     error = signal<string | null>(null);
     results = signal<OmdbSearchItem[]>([]);
+    private destroyRef = inject(DestroyRef);
 
     constructor(private api: MovieApiService) {
         this.titleCtrl.valueChanges
@@ -53,13 +49,16 @@ export class SearchComponent {
                 filter((v) => v.trim().length >= 3),
                 tap(() => this.loading.set(true)),
                 switchMap((v) =>
-                    this.api.search(v.trim()).pipe(
-                        catchError(() =>
-                            of({ Response: 'False' as const, Error: 'Network/API error' }),
+                    this.api
+                        .search(v.trim())
+                        .pipe(
+                            catchError(() =>
+                                of({ Response: 'False' as const, Error: 'Network/API error' }),
+                            ),
                         ),
-                    ),
                 ),
                 tap(() => this.loading.set(false)),
+                takeUntilDestroyed(this.destroyRef),
             )
             .subscribe((res) => {
                 if (res.Response === 'True') {
@@ -75,7 +74,23 @@ export class SearchComponent {
     displayMovie = (m: OmdbSearchItem) => (m ? `${m.Title} (${m.Year})` : '');
 
     onSelected(item: OmdbSearchItem) {
-        // Phase 3: hier speichern wir in die Library
-        console.log('Selected:', item);
+        this.selected.set(item);
+
+        // Input leeren + Vorschläge weg
+        this.titleCtrl.setValue('');
+        this.results.set([]);
+    }
+    selected = signal<OmdbSearchItem | null>(null);
+
+    clearSearch() {
+        this.titleCtrl.setValue('');
+        this.results.set([]);
+        this.error.set(null);
+        this.loading.set(false);
+    }
+    addToLibrary(item: OmdbSearchItem) {
+        console.log('Add to library:', item);
+        // Phase 3: in Library-State speichern + localStorage
+        this.selected.set(null);
     }
 }
