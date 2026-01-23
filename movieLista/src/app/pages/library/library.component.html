@@ -1,1 +1,35 @@
-<p>library works!</p>
+<mat-card>
+    <mat-card-title>Library ({{ library.count() }})</mat-card-title>
+
+    <mat-card-content *ngIf="library.items().length; else empty">
+        <div class="row" *ngFor="let item of library.items()">
+            <div class="main">
+                <div class="title">{{ item.title }} ({{ item.year }})</div>
+
+                <div class="meta">
+                    <mat-chip-set>
+                        <mat-chip>{{ item.type }}</mat-chip>
+                        <mat-chip [disabled]="true">{{ item.seen ? 'seen' : 'not seen' }}</mat-chip>
+                    </mat-chip-set>
+                </div>
+            </div>
+
+            <div class="actions">
+                <button mat-button (click)="toggleSeen(item.imdbID)">
+                    {{ item.seen ? 'Mark not seen' : 'Mark seen' }}
+                </button>
+                <button mat-button (click)="remove(item.imdbID)">Remove</button>
+            </div>
+        </div>
+
+        <div class="footer">
+            <button mat-button (click)="clear()">Clear all</button>
+        </div>
+    </mat-card-content>
+
+    <ng-template #empty>
+        <mat-card-content>
+            <p>No items yet. Go to Search and add some movies/series.</p>
+        </mat-card-content>
+    </ng-template>
+</mat-card>

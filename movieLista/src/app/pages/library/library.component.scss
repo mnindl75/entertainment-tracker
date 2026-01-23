@@ -1,0 +1,23 @@
+.row {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    align-items: flex-start;
+    color: #ffffff;
+}
+
+.title {
+    font-weight: 600;
+}
+
+.actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+}
+
+.footer {
+    margin-top: 12px;
+}

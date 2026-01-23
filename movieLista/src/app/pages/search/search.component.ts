@@ -12,6 +12,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatButtonModule } from '@angular/material/button';
+import { LibraryStore } from '../../core/library.store';
+import { toLibraryItem } from '../../core/library.types';
 
 @Component({
     selector: 'app-search',
@@ -37,7 +39,10 @@ export class SearchComponent {
     results = signal<OmdbSearchItem[]>([]);
     private destroyRef = inject(DestroyRef);
 
-    constructor(private api: MovieApiService) {
+    constructor(
+        private api: MovieApiService,
+        private library: LibraryStore,
+    ) {
         this.titleCtrl.valueChanges
             .pipe(
                 debounceTime(250),
@@ -89,8 +94,7 @@ export class SearchComponent {
         this.loading.set(false);
     }
     addToLibrary(item: OmdbSearchItem) {
-        console.log('Add to library:', item);
-        // Phase 3: in Library-State speichern + localStorage
+        this.library.add(toLibraryItem(item));
         this.selected.set(null);
     }
 }
