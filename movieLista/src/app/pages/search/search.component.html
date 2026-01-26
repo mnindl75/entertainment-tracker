@@ -15,25 +15,19 @@
 
             <mat-autocomplete
                 #auto="matAutocomplete"
-                [displayWith]="displayMovie"
+                [displayWith]="displayItem"
                 (optionSelected)="onSelected($event.option.value)"
             >
                 <mat-option *ngFor="let m of results()" [value]="m">
-                    {{ m.Title }} ({{ m.Year }}) — {{ m.Type }}
+                    {{ m.title }}{{ m.year ? ' (' + m.year + ')' : '' }} — {{ m.mediaType }}
+                    <span *ngIf="m.originalTitle && m.originalTitle !== m.title">
+                        · {{ m.originalTitle }}
+                    </span>
                 </mat-option>
             </mat-autocomplete>
 
-            <mat-hint>Example: “Matrix”, “Breaking Bad”</mat-hint>
+            <mat-hint>Example: “Herr der Ringe”, “Stirb langsam”, “Tatort”</mat-hint>
         </mat-form-field>
-        <mat-card class="selected" *ngIf="selected() as s">
-            <mat-card-title>{{ s.Title }} ({{ s.Year }})</mat-card-title>
-            <mat-card-subtitle>{{ s.Type }} — {{ s.imdbID }}</mat-card-subtitle>
-
-            <mat-card-actions align="end">
-                <button mat-button (click)="clearSearch()">Clear</button>
-                <button mat-raised-button (click)="addToLibrary(s)">Add to library</button>
-            </mat-card-actions>
-        </mat-card>
 
         <div class="row" *ngIf="loading()">
             <mat-progress-spinner diameter="24" mode="indeterminate"></mat-progress-spinner>
@@ -41,5 +35,22 @@
         </div>
 
         <div class="error" *ngIf="error()">{{ error() }}</div>
+
+        <mat-card class="selected" *ngIf="selected() as s">
+            <mat-card-title>{{ s.title }}{{ s.year ? ' (' + s.year + ')' : '' }}</mat-card-title>
+            <mat-card-subtitle>{{ s.mediaType }} · TMDB ID {{ s.id }}</mat-card-subtitle>
+
+            <img
+                *ngIf="posterUrl(s.posterPath) as url"
+                [src]="url"
+                alt=""
+                style="margin-top: 8px; max-width: 185px"
+            />
+
+            <mat-card-actions align="end">
+                <button mat-button (click)="clearSearch()">Clear</button>
+                <button mat-raised-button (click)="addToLibrary(s)">Add to library</button>
+            </mat-card-actions>
+        </mat-card>
     </mat-card-content>
 </mat-card>

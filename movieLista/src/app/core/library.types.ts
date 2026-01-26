@@ -1,4 +1,5 @@
 import { OmdbSearchItem } from './movie-api.service';
+import { SearchItem } from './search.types';
 
 export type LibraryItem = {
     imdbID: string;
@@ -10,13 +11,13 @@ export type LibraryItem = {
     seen: boolean;
 };
 
-export function toLibraryItem(m: OmdbSearchItem): LibraryItem {
+export function toLibraryItem(m: SearchItem): LibraryItem {
     return {
-        imdbID: m.imdbID,
-        title: m.Title,
-        year: m.Year,
-        type: m.Type,
-        poster: m.Poster,
+        imdbID: String(m.id), // TMDB numeric id -> string
+        title: m.title,
+        year: m.year ?? '',
+        type: m.mediaType === 'tv' ? 'series' : 'movie',
+        poster: m.posterPath ?? 'N/A',
         addedAt: new Date().toISOString(),
         seen: true,
     };

@@ -1,17 +1,17 @@
-import { Component, DestroyRef, inject, signal } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { catchError, debounceTime, distinctUntilChanged, filter, of, switchMap, tap } from 'rxjs';
-
-import { MovieApiService, OmdbSearchItem } from '../../core/movie-api.service';
 
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatButtonModule } from '@angular/material/button';
+
+import { TmdbApiService } from '../../core/tmdb-api.service';
+import { SearchItem } from '../../core/search.types';
 import { LibraryStore } from '../../core/library.store';
 import { toLibraryItem } from '../../core/library.types';
 
@@ -36,11 +36,11 @@ export class SearchComponent {
 
     loading = signal(false);
     error = signal<string | null>(null);
-    results = signal<OmdbSearchItem[]>([]);
-    private destroyRef = inject(DestroyRef);
+    results = signal<SearchItem[]>([]);
+    selected = signal<SearchItem | null>(null);
 
     constructor(
-        private api: MovieApiService,
+        private tmdb: TmdbApiService,
         private library: LibraryStore,
     ) {
         this.titleCtrl.valueChanges
@@ -54,47 +54,72 @@ export class SearchComponent {
                 filter((v) => v.trim().length >= 3),
                 tap(() => this.loading.set(true)),
                 switchMap((v) =>
-                    this.api
-                        .search(v.trim())
-                        .pipe(
-                            catchError(() =>
-                                of({ Response: 'False' as const, Error: 'Network/API error' }),
-                            ),
+                    this.tmdb.searchMulti(v.trim(), 'de-DE', 'DE').pipe(
+                        catchError(() =>
+                            of({
+                                page: 1,
+                                results: [],
+                                total_pages: 1,
+                                total_results: 0,
+                            }),
                         ),
+                    ),
                 ),
                 tap(() => this.loading.set(false)),
-                takeUntilDestroyed(this.destroyRef),
             )
             .subscribe((res) => {
-                if (res.Response === 'True') {
-                    this.results.set(res.Search);
-                    this.error.set(null);
-                } else {
-                    this.results.set([]);
-                    this.error.set(res.Error);
-                }
+                const items = res.results
+                    .map((r: any) => {
+                        if (r.media_type !== 'movie' && r.media_type !== 'tv') return null;
+
+                        const isMovie = r.media_type === 'movie';
+                        const title = isMovie ? (r.title ?? '') : (r.name ?? '');
+                        if (!title) return null;
+
+                        const originalTitle = isMovie ? r.original_title : r.original_name;
+                        const date = isMovie ? r.release_date : r.first_air_date;
+                        const year = date ? String(date).slice(0, 4) : undefined;
+
+                        return {
+                            id: r.id,
+                            mediaType: r.media_type,
+                            title,
+                            originalTitle: originalTitle || undefined,
+                            year,
+                            posterPath: r.poster_path ?? null,
+                        } satisfies SearchItem;
+                    })
+                    .filter((x: SearchItem | null) => x !== null) as SearchItem[];
+                this.results.set(items);
+
+                this.error.set(items.length ? null : 'No results found');
             });
     }
 
-    displayMovie = (m: OmdbSearchItem) => (m ? `${m.Title} (${m.Year})` : '');
+    displayItem = (m: SearchItem) => (m ? `${m.title}${m.year ? ` (${m.year})` : ''}` : '');
 
-    onSelected(item: OmdbSearchItem) {
+    onSelected(item: SearchItem) {
         this.selected.set(item);
 
         // Input leeren + Vorschläge weg
         this.titleCtrl.setValue('');
         this.results.set([]);
     }
-    selected = signal<OmdbSearchItem | null>(null);
+
+    addToLibrary(item: SearchItem) {
+        this.library.add(toLibraryItem(item));
+        this.selected.set(null);
+    }
 
     clearSearch() {
         this.titleCtrl.setValue('');
         this.results.set([]);
         this.error.set(null);
         this.loading.set(false);
-    }
-    addToLibrary(item: OmdbSearchItem) {
-        this.library.add(toLibraryItem(item));
         this.selected.set(null);
+    }
+
+    posterUrl(path?: string | null) {
+        return path ? `https://image.tmdb.org/t/p/w185${path}` : null;
     }
 }
