@@ -19,6 +19,16 @@
                     {{ item.seen ? 'Mark not seen' : 'Mark seen' }}
                 </button>
                 <button mat-button (click)="remove(item.imdbID)">Remove</button>
+                <a
+                    mat-button
+                    [routerLink]="[
+                        '/details',
+                        item.type === 'series' ? 'tv' : 'movie',
+                        item.imdbID,
+                    ]"
+                >
+                    Details
+                </a>
             </div>
         </div>
 

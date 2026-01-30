@@ -1,0 +1,43 @@
+:host {
+    color: #fff;
+}
+
+mat-card {
+    position: relative;
+}
+
+.close {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+}
+
+.full {
+    width: 100%;
+}
+
+.row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.poster {
+    margin-top: 12px;
+    max-width: 342px;
+    width: 100%;
+    border-radius: 12px;
+}
+
+.genres {
+    margin: 12px 0;
+}
+
+.overview {
+    margin-top: 8px;
+}
+
+.error {
+    font-weight: 600;
+    margin-top: 8px;
+}

@@ -7,6 +7,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatChipsModule } from '@angular/material/chips';
+import { RouterLink } from '@angular/router';
 
 @Component({
     selector: 'app-library',
@@ -18,6 +19,7 @@ import { MatChipsModule } from '@angular/material/chips';
         MatButtonModule,
         MatIconModule,
         MatChipsModule,
+        RouterLink,
     ],
     templateUrl: './library.component.html',
     styleUrl: './library.component.scss',

@@ -12,4 +12,9 @@ export const routes: Routes = [
         loadComponent: () =>
             import('./pages/library/library.component').then((m) => m.LibraryComponent),
     },
+    {
+        path: 'details/:mediaType/:id',
+        loadComponent: () =>
+            import('./pages/details/details.component').then((m) => m.DetailsComponent),
+    },
 ];
