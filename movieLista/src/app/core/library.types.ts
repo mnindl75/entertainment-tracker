@@ -1,4 +1,3 @@
-import { OmdbSearchItem } from './movie-api.service';
 import { SearchItem } from './search.types';
 
 export type LibraryItem = {
