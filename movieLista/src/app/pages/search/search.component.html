@@ -23,6 +23,10 @@
                     <span *ngIf="m.originalTitle && m.originalTitle !== m.title">
                         · {{ m.originalTitle }}
                     </span>
+                    <span *ngIf="m.ratingAverage != null">
+                        · ★ {{ m.ratingAverage | number: '1.1-1' }}
+                        <span *ngIf="m.ratingCount != null">({{ m.ratingCount | number }})</span>
+                    </span>
                 </mat-option>
             </mat-autocomplete>
 
@@ -39,6 +43,11 @@
         <mat-card class="selected" *ngIf="selected() as s">
             <mat-card-title>{{ s.title }}{{ s.year ? ' (' + s.year + ')' : '' }}</mat-card-title>
             <mat-card-subtitle>{{ s.mediaType }} · TMDB ID {{ s.id }}</mat-card-subtitle>
+
+            <div *ngIf="s.ratingAverage != null" style="margin-top: 4px">
+                ★ {{ s.ratingAverage | number: '1.1-1' }}
+                <span *ngIf="s.ratingCount != null">({{ s.ratingCount | number }} votes)</span>
+            </div>
 
             <img
                 *ngIf="posterUrl(s.posterPath) as url"

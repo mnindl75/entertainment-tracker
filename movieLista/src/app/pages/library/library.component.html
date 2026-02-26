@@ -10,6 +10,12 @@
                     <mat-chip-set>
                         <mat-chip>{{ item.type }}</mat-chip>
                         <mat-chip [disabled]="true">{{ item.seen ? 'seen' : 'not seen' }}</mat-chip>
+                        <mat-chip *ngIf="item.ratingAverage != null">
+                            ★ {{ item.ratingAverage | number: '1.1-1' }}
+                            <span *ngIf="item.ratingCount != null"
+                                >({{ item.ratingCount | number }})</span
+                            >
+                        </mat-chip>
                     </mat-chip-set>
                 </div>
             </div>

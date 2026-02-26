@@ -5,4 +5,6 @@ export type SearchItem = {
     originalTitle?: string; // optional
     year?: string; // "1999"
     posterPath?: string | null;
+    ratingAverage?: number | null;
+    ratingCount?: number | null;
 };

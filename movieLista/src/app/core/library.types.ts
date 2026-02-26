@@ -9,6 +9,8 @@ export type LibraryItem = {
     poster: string;
     addedAt: string; // ISO date
     seen: boolean;
+    ratingAverage?: number | null;
+    ratingCount?: number | null;
 };
 
 export function toLibraryItem(m: SearchItem): LibraryItem {
@@ -20,5 +22,7 @@ export function toLibraryItem(m: SearchItem): LibraryItem {
         poster: m.posterPath ?? 'N/A',
         addedAt: new Date().toISOString(),
         seen: true,
+        ratingAverage: m.ratingAverage ?? null,
+        ratingCount: m.ratingCount ?? null,
     };
 }

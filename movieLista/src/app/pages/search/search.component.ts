@@ -79,6 +79,9 @@ export class SearchComponent {
                         const originalTitle = isMovie ? r.original_title : r.original_name;
                         const date = isMovie ? r.release_date : r.first_air_date;
                         const year = date ? String(date).slice(0, 4) : undefined;
+                        const ratingAverage =
+                            typeof r.vote_average === 'number' ? r.vote_average : null;
+                        const ratingCount = typeof r.vote_count === 'number' ? r.vote_count : null;
 
                         return {
                             id: r.id,
@@ -87,6 +90,8 @@ export class SearchComponent {
                             originalTitle: originalTitle || undefined,
                             year,
                             posterPath: r.poster_path ?? null,
+                            ratingAverage,
+                            ratingCount,
                         } satisfies SearchItem;
                     })
                     .filter((x: SearchItem | null) => x !== null) as SearchItem[];

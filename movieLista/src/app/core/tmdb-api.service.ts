@@ -36,6 +36,8 @@ export type TmdbMovieDetails = {
     genres: TmdbGenre[];
     poster_path: string | null;
     backdrop_path: string | null;
+    vote_average: number;
+    vote_count: number;
 };
 
 export type TmdbTvSeason = {
@@ -56,6 +58,8 @@ export type TmdbTvDetails = {
     seasons: TmdbTvSeason[];
     poster_path: string | null;
     backdrop_path: string | null;
+    vote_average: number;
+    vote_count: number;
 };
 
 export type TmdbEpisode = {

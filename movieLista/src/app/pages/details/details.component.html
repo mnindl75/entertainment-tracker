@@ -25,6 +25,10 @@
 
             <!-- MOVIE -->
             <ng-container *ngIf="d.mediaType === 'movie'">
+                <p>
+                    <b>Rating:</b> {{ d.data.vote_average | number: '1.1-1' }} / 10
+                    <span>({{ d.data.vote_count | number }} votes)</span>
+                </p>
                 <p><b>Release:</b> {{ d.data.release_date || '-' }}</p>
                 <p><b>Runtime:</b> {{ d.data.runtime ?? '-' }} min</p>
                 <p class="overview">{{ d.data.overview || 'No overview.' }}</p>
@@ -32,6 +36,10 @@
 
             <!-- TV -->
             <ng-container *ngIf="d.mediaType === 'tv'">
+                <p>
+                    <b>Rating:</b> {{ d.data.vote_average | number: '1.1-1' }} / 10
+                    <span>({{ d.data.vote_count | number }} votes)</span>
+                </p>
                 <p><b>First air:</b> {{ d.data.first_air_date || '-' }}</p>
                 <p>
                     <b>Seasons:</b> {{ d.data.number_of_seasons }} · <b>Episodes:</b>
