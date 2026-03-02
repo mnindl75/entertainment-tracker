@@ -10,6 +10,7 @@ export type LibraryItem = {
     seen: boolean;
     ratingAverage?: number | null;
     ratingCount?: number | null;
+    userRating?: number | null;
 };
 
 export function toLibraryItem(m: SearchItem): LibraryItem {
@@ -23,5 +24,6 @@ export function toLibraryItem(m: SearchItem): LibraryItem {
         seen: true,
         ratingAverage: m.ratingAverage ?? null,
         ratingCount: m.ratingCount ?? null,
+        userRating: null,
     };
 }

@@ -27,6 +27,12 @@ import { RouterLink } from '@angular/router';
 export class LibraryComponent {
     constructor(public library: LibraryStore) {}
 
+    starText(rating: number | null | undefined, max = 5) {
+        if (!rating || rating < 1) return '';
+        const full = Math.min(max, Math.max(1, Math.round(rating)));
+        return '★'.repeat(full) + '☆'.repeat(Math.max(0, max - full));
+    }
+
     remove(imdbID: string) {
         this.library.remove(imdbID);
     }

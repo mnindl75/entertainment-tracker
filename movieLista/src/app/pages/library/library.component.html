@@ -16,6 +16,9 @@
                                 >({{ item.ratingCount | number }})</span
                             >
                         </mat-chip>
+                        <mat-chip *ngIf="item.userRating != null">
+                            My rating: {{ starText(item.userRating) }}
+                        </mat-chip>
                     </mat-chip-set>
                 </div>
             </div>

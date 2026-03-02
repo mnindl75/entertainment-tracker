@@ -23,6 +23,36 @@
                 </mat-chip-set>
             </div>
 
+            <div class="user-rating" *ngIf="libraryItem() as item">
+                <p>
+                    <b>Status:</b> {{ item.seen ? 'seen' : 'not seen' }}
+                    <button mat-button (click)="toggleSeen()">
+                        {{ item.seen ? 'Mark not seen' : 'Mark seen' }}
+                    </button>
+                </p>
+                <p>
+                    <b>Your rating:</b>
+                    <span *ngIf="item.userRating != null">{{ item.userRating }} / 5</span>
+                    <span *ngIf="item.userRating == null">Not rated</span>
+                </p>
+                <div>
+                    <button
+                        mat-icon-button
+                        *ngFor="let star of stars"
+                        [disabled]="!canRate()"
+                        (click)="setUserRating(star)"
+                        [attr.aria-label]="'Rate ' + star + ' star(s)'"
+                    >
+                        <mat-icon>
+                            {{ star <= (item.userRating ?? 0) ? 'star' : 'star_border' }}
+                        </mat-icon>
+                    </button>
+                </div>
+                <div *ngIf="!canRate()" class="hint">
+                    Mark as seen to rate.
+                </div>
+            </div>
+
             <!-- MOVIE -->
             <ng-container *ngIf="d.mediaType === 'movie'">
                 <p>

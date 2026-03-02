@@ -21,6 +21,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { Router } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { LibraryStore } from '../../core/library.store';
 
 type MediaType = 'movie' | 'tv';
 type Details =
@@ -48,10 +49,13 @@ type Details =
 export class DetailsComponent {
     private route = inject(ActivatedRoute);
     private tmdb = inject(TmdbApiService);
+    private library = inject(LibraryStore);
 
     loading = signal(false);
     error = signal<string | null>(null);
     private router = inject(Router);
+
+    readonly stars = [1, 2, 3, 4, 5] as const;
 
     // Route params -> Signal
     params = toSignal(
@@ -106,6 +110,17 @@ export class DetailsComponent {
 
     tvId = computed(() => this.tvDetails()?.id ?? 0);
 
+    libraryItem = computed(() => {
+        const id = this.params().id;
+        if (!id) return null;
+        return this.library.itemById().get(String(id)) ?? null;
+    });
+
+    canRate = computed(() => {
+        const item = this.libraryItem();
+        return !!item && item.seen;
+    });
+
     // Auto-set season to 1 when TV details load
     constructor() {
         // wenn tv details wechseln, setzen wir staffel zurück
@@ -138,6 +153,19 @@ export class DetailsComponent {
 
     posterUrl(path?: string | null) {
         return path ? `https://image.tmdb.org/t/p/w342${path}` : null;
+    }
+
+    setUserRating(rating: number) {
+        if (!this.canRate()) return;
+        const id = this.params().id;
+        if (!id) return;
+        this.library.setRating(String(id), rating);
+    }
+
+    toggleSeen() {
+        const item = this.libraryItem();
+        if (!item) return;
+        this.library.toggleSeen(item.imdbID);
     }
 
     titleText = computed(() => {

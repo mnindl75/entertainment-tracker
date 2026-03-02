@@ -20,6 +20,9 @@ export class LibraryStore {
 
     // read-only “public” view
     readonly items = computed(() => this._items());
+    readonly itemById = computed(
+        () => new Map(this._items().map((item) => [item.imdbID, item] as const)),
+    );
 
     readonly count = computed(() => this._items().length);
 
@@ -45,6 +48,18 @@ export class LibraryStore {
     toggleSeen(imdbID: string) {
         this._items.set(
             this._items().map((x) => (x.imdbID === imdbID ? { ...x, seen: !x.seen } : x)),
+        );
+    }
+
+    setRating(imdbID: string, rating: number | null) {
+        const normalized = rating == null ? null : Math.min(5, Math.max(1, Math.round(rating)));
+
+        this._items.set(
+            this._items().map((x) =>
+                x.imdbID === imdbID
+                    ? { ...x, userRating: normalized, seen: normalized ? true : x.seen }
+                    : x,
+            ),
         );
     }
 
