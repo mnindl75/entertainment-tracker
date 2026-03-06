@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, effect, inject, signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { catchError, map, of, switchMap, tap } from 'rxjs';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
@@ -89,7 +89,7 @@ export class DetailsComponent {
                     .getMovieDetails(id)
                     .pipe(map((data) => ({ mediaType: 'movie' as const, data })));
             }),
-            catchError((e) => {
+            catchError(() => {
                 this.error.set('Failed to load details');
                 return of(null);
             }),
@@ -121,23 +121,17 @@ export class DetailsComponent {
         return !!item && item.seen;
     });
 
+    private lastTvId = 0;
+
     // Auto-set season to 1 when TV details load
     constructor() {
-        // wenn tv details wechseln, setzen wir staffel zurück
-        const d = this.details;
-        // simplest: set in an effect-like computed read
-        // (Angular führt computed/effects sauber aus; hier halten wir es minimal)
-        // => wir setzen nur, wenn tvDetails erstmals da ist
-        let lastTvId = 0;
-        const interval = setInterval(() => {
+        effect(() => {
             const currentTvId = this.tvId();
-            if (currentTvId && currentTvId !== lastTvId) {
-                lastTvId = currentTvId;
+            if (currentTvId && currentTvId !== this.lastTvId) {
+                this.lastTvId = currentTvId;
                 this.selectedSeason.set(1);
             }
-            // stoppe wenn component zerstört wird: für Lernprojekt ok; später besser mit effect+cleanup
-        }, 200);
-        // NOTE: Für sauber: effect(onCleanup). Wenn du willst, bauen wir das danach richtig.
+        });
     }
 
     seasonDetails = toSignal(
