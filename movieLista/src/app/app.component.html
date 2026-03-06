@@ -2,6 +2,7 @@
     <span>Movie Tracker</span>
     <span class="spacer"></span>
 
+    <a mat-button routerLink="/library" routerLinkActive="active">Library</a>
     <a
         mat-button
         routerLink="/search"
@@ -9,7 +10,6 @@
         [routerLinkActiveOptions]="{ exact: true }"
         >Search
     </a>
-    <a mat-button routerLink="/library" routerLinkActive="active">Library</a>
 </mat-toolbar>
 
 <main class="content">

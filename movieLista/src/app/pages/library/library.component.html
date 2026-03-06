@@ -1,8 +1,11 @@
 <mat-card>
-    <mat-card-title>Library ({{ library.count() }})</mat-card-title>
+    <mat-card-title class="title-row">
+        <span>Library ({{ library.count() }})</span>
+        <button mat-button (click)="openSortSheet()">Sort</button>
+    </mat-card-title>
 
     <mat-card-content *ngIf="library.items().length; else empty">
-        <div class="row" *ngFor="let item of library.items()">
+        <div class="row" *ngFor="let item of sortedItems()">
             <div class="main">
                 <div class="title">{{ item.title }} ({{ item.year }})</div>
 

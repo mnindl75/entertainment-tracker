@@ -21,3 +21,10 @@
 .footer {
     margin-top: 12px;
 }
+
+.title-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+}
