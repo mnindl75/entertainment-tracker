@@ -6,4 +6,5 @@ export const environment = {
     tmdbToken:
         'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJlYWE1MmE4ZDc1NmQ2NDc0NmRiYzA1ZmEyMmUwNzcyZiIsIm5iZiI6MTc2OTEwMDQ0Ni43ODksInN1YiI6IjY5NzI1NDllZmFmNTE4ZmM1NTA5NmJkMiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.8crPF4sm2NI6KEknAdZqKxGhdYCdX93UP8Zxtg37f58',
     tmdbBaseUrl: 'https://api.themoviedb.org/3',
+    googleBooksApiKey: 'AIzaSyDDNt1U3JQnFNerHOcJkcZdrqh8i9RvgH0',
 };

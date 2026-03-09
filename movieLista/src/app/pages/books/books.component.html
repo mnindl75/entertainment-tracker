@@ -1,0 +1,35 @@
+<mat-card>
+    <mat-card-title>Books (Google Books, German)</mat-card-title>
+
+    <mat-card-content>
+        <mat-form-field appearance="outline" class="full">
+            <mat-label>Book title or author</mat-label>
+            <input
+                matInput
+                type="text"
+                [formControl]="queryCtrl"
+                placeholder="Type at least 3 characters"
+            />
+        </mat-form-field>
+
+        <button mat-raised-button (click)="search()">Search</button>
+
+        <div class="row" *ngIf="loading()">
+            <mat-progress-spinner diameter="24" mode="indeterminate"></mat-progress-spinner>
+            <span>Loading…</span>
+        </div>
+
+        <div class="error" *ngIf="error()">{{ error() }}</div>
+
+        <mat-list *ngIf="results().length">
+            <mat-list-item *ngFor="let item of results()">
+                <img matListItemAvatar *ngIf="coverUrl(item) as url" [src]="url" alt="" />
+                <div matListItemTitle>{{ item.volumeInfo?.title || 'Untitled' }}</div>
+                <div matListItemLine>
+                    {{ authorsText(item) }} · {{ yearText(item) }} ·
+                    {{ item.volumeInfo?.language?.toUpperCase() || 'N/A' }}
+                </div>
+            </mat-list-item>
+        </mat-list>
+    </mat-card-content>
+</mat-card>
