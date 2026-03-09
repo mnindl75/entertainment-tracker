@@ -52,6 +52,7 @@ describe('LibraryComponent', () => {
                     provide: BooksStore,
                     useValue: {
                         items: () => [],
+                        itemById: () => new Map(),
                         count: () => 0,
                         remove: () => undefined,
                         clear: () => undefined,

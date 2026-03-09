@@ -40,6 +40,14 @@ export class GoogleBooksService {
 
     constructor(private http: HttpClient) {}
 
+    getVolume(id: string) {
+        const params: Record<string, string> = {};
+        if (environment.googleBooksApiKey) {
+            params['key'] = environment.googleBooksApiKey;
+        }
+        return this.http.get<GoogleBookVolume>(`${this.baseUrl}/${id}`, { params });
+    }
+
     searchBooks(query: string, maxResults = 20, language = 'de') {
         const params: Record<string, string> = {
             q: query,

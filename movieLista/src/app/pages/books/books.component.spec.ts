@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { of } from 'rxjs';
+import { RouterTestingModule } from '@angular/router/testing';
 
 import { BooksComponent } from './books.component';
 import { GoogleBooksService } from '../../core/google-books.service';
@@ -12,7 +13,7 @@ describe('BooksComponent', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            imports: [NoopAnimationsModule, BooksComponent],
+            imports: [NoopAnimationsModule, RouterTestingModule, BooksComponent],
             providers: [
                 {
                     provide: GoogleBooksService,

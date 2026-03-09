@@ -1,0 +1,28 @@
+.row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.error {
+    margin-top: 8px;
+}
+
+.cover {
+    margin-top: 8px;
+    max-width: 160px;
+}
+
+.meta {
+    display: grid;
+    gap: 4px;
+    margin-top: 8px;
+}
+
+.description {
+    margin-top: 8px;
+}
+
+.link {
+    margin-top: 8px;
+}

@@ -18,6 +18,13 @@ export const routes: Routes = [
             import('./pages/details/details.component').then((m) => m.DetailsComponent),
     },
     {
+        path: 'books/:id',
+        loadComponent: () =>
+            import('./pages/books-details/books-details.component').then(
+                (m) => m.BooksDetailsComponent,
+            ),
+    },
+    {
         path: 'books',
         loadComponent: () => import('./pages/books/books.component').then((m) => m.BooksComponent),
     },

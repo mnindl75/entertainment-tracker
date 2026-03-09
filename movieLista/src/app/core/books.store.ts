@@ -19,6 +19,7 @@ export class BooksStore {
     private readonly _items = signal<BookItem[]>(loadFromStorage());
 
     readonly items = computed(() => this._items());
+    readonly itemById = computed(() => new Map(this._items().map((item) => [item.id, item])));
     readonly count = computed(() => this._items().length);
 
     constructor() {

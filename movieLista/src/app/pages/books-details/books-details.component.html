@@ -1,0 +1,62 @@
+<mat-card>
+    <mat-card-header>
+        <button mat-icon-button class="close" (click)="close()" aria-label="Close">
+            <mat-icon>close</mat-icon>
+        </button>
+        <mat-card-title>{{ titleText() }}</mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+        <div *ngIf="loading()" class="row">
+            <mat-progress-spinner diameter="24" mode="indeterminate"></mat-progress-spinner>
+            <span>Loading…</span>
+        </div>
+
+        <div *ngIf="error()" class="error">{{ error() }}</div>
+
+        <ng-container *ngIf="details() as d">
+            <img *ngIf="coverUrl(d) as url" [src]="url" alt="" class="cover" />
+
+            <div class="meta">
+                <div><b>Authors:</b> {{ authorsText(d) }}</div>
+                <div><b>Year:</b> {{ yearText(d) }}</div>
+                <div><b>Language:</b> {{ d.volumeInfo?.language?.toUpperCase() || 'N/A' }}</div>
+                <div><b>Publisher:</b> {{ d.volumeInfo?.publisher || '-' }}</div>
+                <div><b>Pages:</b> {{ d.volumeInfo?.pageCount ?? '-' }}</div>
+                <div><b>Genres:</b> {{ categoriesText(d) }}</div>
+                <div><b>Rating:</b> {{ ratingText(d) }}</div>
+                <div><b>Identifiers:</b> {{ identifiersText(d) }}</div>
+            </div>
+
+            <p *ngIf="d.volumeInfo?.description" class="description">
+                {{ d.volumeInfo?.description }}
+            </p>
+
+            <div *ngIf="linksText(d) as link" class="link">
+                <a [href]="link" target="_blank" rel="noopener">Open in Google Books</a>
+            </div>
+        </ng-container>
+
+        <div *ngIf="!details() && !loading() && !error()" class="error">
+            No details found.
+        </div>
+
+        <mat-card-actions align="end">
+            <button mat-button (click)="close()">Back</button>
+            <button
+                mat-button
+                *ngIf="storeItem()"
+                (click)="removeFromLibrary()"
+            >
+                Remove from library
+            </button>
+            <button
+                mat-raised-button
+                *ngIf="!storeItem() && details()"
+                (click)="addToLibrary()"
+            >
+                Add to library
+            </button>
+        </mat-card-actions>
+    </mat-card-content>
+</mat-card>

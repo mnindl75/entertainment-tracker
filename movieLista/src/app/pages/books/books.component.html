@@ -73,6 +73,7 @@
 
             <mat-card-actions align="end">
                 <button mat-button (click)="clearSelection()">Clear</button>
+                <a mat-button [routerLink]="['/books', s.id]">Details</a>
                 <button mat-raised-button (click)="addToLibrary(s)">Add to library</button>
             </mat-card-actions>
         </mat-card>

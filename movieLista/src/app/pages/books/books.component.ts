@@ -9,6 +9,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatListModule } from '@angular/material/list';
+import { RouterLink } from '@angular/router';
 
 import { GoogleBooksService, GoogleBookVolume } from '../../core/google-books.service';
 import { BooksStore } from '../../core/books.store';
@@ -26,6 +27,7 @@ import { toBookItem } from '../../core/books.types';
         MatButtonModule,
         MatProgressSpinnerModule,
         MatListModule,
+        RouterLink,
     ],
     templateUrl: './books.component.html',
     styleUrl: './books.component.scss',
