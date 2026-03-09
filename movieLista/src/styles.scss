@@ -8,6 +8,10 @@ body {
     margin: 0;
     font-family: Roboto, 'Helvetica Neue', sans-serif;
 }
+.mat-mdc-card-title {
+    color: #ffffff;
+    margin: 12px !important;
+}
 .mat-mdc-card-content {
     color: #fff;
 }
