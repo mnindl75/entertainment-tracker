@@ -35,6 +35,21 @@
     border-top: 1px solid rgba(255, 255, 255, 0.12);
 }
 
-.books-section h3 {
-    margin: 0 0 6px;
+.books-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+}
+
+.books-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-top: 8px;
+}
+
+.books-main .meta {
+    margin-top: 4px;
+    color: rgba(255, 255, 255, 0.8);
 }

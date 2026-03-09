@@ -1,6 +1,7 @@
 import { Component, computed, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LibraryStore } from '../../core/library.store';
+import { BooksStore } from '../../core/books.store';
 
 import { MatCardModule } from '@angular/material/card';
 import { MatListModule } from '@angular/material/list';
@@ -32,6 +33,7 @@ export class LibraryComponent {
 
     constructor(
         public library: LibraryStore,
+        public books: BooksStore,
         private bottomSheet: MatBottomSheet,
     ) {}
 
@@ -87,5 +89,26 @@ export class LibraryComponent {
 
     clear() {
         this.library.clear();
+    }
+
+    removeBook(id: string) {
+        this.books.remove(id);
+    }
+
+    clearBooks() {
+        this.books.clear();
+    }
+
+    bookAuthorsText(authors: string[]) {
+        return authors.length ? authors.join(', ') : '-';
+    }
+
+    bookYearText(year: string) {
+        return year || '-';
+    }
+
+    bookRatingText(avg: number | null | undefined, count: number | null | undefined) {
+        if (avg == null) return '-';
+        return count ? `${avg} (${count})` : String(avg);
     }
 }

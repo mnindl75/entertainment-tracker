@@ -6,6 +6,7 @@ import { MatBottomSheet } from '@angular/material/bottom-sheet';
 
 import { LibraryComponent } from './library.component';
 import { LibraryStore } from '../../core/library.store';
+import { BooksStore } from '../../core/books.store';
 
 describe('LibraryComponent', () => {
     let component: LibraryComponent;
@@ -44,6 +45,15 @@ describe('LibraryComponent', () => {
                         count: () => 1,
                         remove: () => undefined,
                         toggleSeen: () => undefined,
+                        clear: () => undefined,
+                    },
+                },
+                {
+                    provide: BooksStore,
+                    useValue: {
+                        items: () => [],
+                        count: () => 0,
+                        remove: () => undefined,
                         clear: () => undefined,
                     },
                 },

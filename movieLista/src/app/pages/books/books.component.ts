@@ -11,6 +11,8 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatListModule } from '@angular/material/list';
 
 import { GoogleBooksService, GoogleBookVolume } from '../../core/google-books.service';
+import { BooksStore } from '../../core/books.store';
+import { toBookItem } from '../../core/books.types';
 
 @Component({
     selector: 'app-books',
@@ -36,7 +38,10 @@ export class BooksComponent {
     results = signal<GoogleBookVolume[]>([]);
     selected = signal<GoogleBookVolume | null>(null);
 
-    constructor(private books: GoogleBooksService) {}
+    constructor(
+        private books: GoogleBooksService,
+        private booksStore: BooksStore,
+    ) {}
 
     search() {
         const query = this.queryCtrl.value.trim();
@@ -77,6 +82,11 @@ export class BooksComponent {
     }
 
     clearSelection() {
+        this.selected.set(null);
+    }
+
+    addToLibrary(item: GoogleBookVolume) {
+        this.booksStore.add(toBookItem(item));
         this.selected.set(null);
     }
 

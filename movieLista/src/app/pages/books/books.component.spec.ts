@@ -4,6 +4,7 @@ import { of } from 'rxjs';
 
 import { BooksComponent } from './books.component';
 import { GoogleBooksService } from '../../core/google-books.service';
+import { BooksStore } from '../../core/books.store';
 
 describe('BooksComponent', () => {
     let component: BooksComponent;
@@ -17,6 +18,12 @@ describe('BooksComponent', () => {
                     provide: GoogleBooksService,
                     useValue: {
                         searchBooks: () => of({ totalItems: 0, items: [] }),
+                    },
+                },
+                {
+                    provide: BooksStore,
+                    useValue: {
+                        add: () => undefined,
                     },
                 },
             ],

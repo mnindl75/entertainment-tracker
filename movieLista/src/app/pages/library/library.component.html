@@ -57,8 +57,33 @@
 
     <mat-card-content>
         <div class="books-section">
-            <h3>Books (coming soon)</h3>
-            <p>No books yet. This section is reserved for future book entries.</p>
+            <div class="books-header">
+                <h3>Books ({{ books.count() }})</h3>
+                <button mat-button (click)="clearBooks()" [disabled]="!books.items().length">
+                    Clear books
+                </button>
+            </div>
+
+            <div *ngIf="books.items().length; else emptyBooks">
+                <div class="books-row" *ngFor="let book of books.items()">
+                    <div class="books-main">
+                        <div class="title">{{ book.title }} ({{ bookYearText(book.year) }})</div>
+                        <div class="meta">
+                            {{ bookAuthorsText(book.authors) }} ·
+                            {{ book.language?.toUpperCase() || 'N/A' }} · Rating:
+                            {{ bookRatingText(book.ratingAverage, book.ratingCount) }}
+                        </div>
+                    </div>
+
+                    <div class="actions">
+                        <button mat-button (click)="removeBook(book.id)">Remove</button>
+                    </div>
+                </div>
+            </div>
+
+            <ng-template #emptyBooks>
+                <p>No books yet. Add some from the Books page.</p>
+            </ng-template>
         </div>
     </mat-card-content>
 </mat-card>
