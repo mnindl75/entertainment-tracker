@@ -6,10 +6,22 @@ export type GoogleBookVolume = {
     id: string;
     volumeInfo?: {
         title?: string;
+        subtitle?: string;
         authors?: string[];
+        publisher?: string;
         publishedDate?: string;
-        language?: string;
         description?: string;
+        industryIdentifiers?: { type: string; identifier: string }[];
+        pageCount?: number;
+        categories?: string[];
+        averageRating?: number;
+        ratingsCount?: number;
+        maturityRating?: string;
+        language?: string;
+        previewLink?: string;
+        infoLink?: string;
+        canonicalVolumeLink?: string;
+        printType?: string;
         imageLinks?: {
             thumbnail?: string;
             smallThumbnail?: string;

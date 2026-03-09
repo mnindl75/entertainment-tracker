@@ -12,3 +12,36 @@
 .full {
     width: 100%;
 }
+
+.selected {
+    margin-top: 12px;
+}
+
+.cover {
+    margin-top: 8px;
+    max-width: 128px;
+}
+
+.description {
+    margin-top: 8px;
+}
+
+.details {
+    display: grid;
+    gap: 4px;
+    margin-top: 8px;
+}
+
+.link {
+    margin-top: 8px;
+}
+
+.all-info {
+    margin-top: 8px;
+}
+
+.all-info pre {
+    max-height: 240px;
+    overflow: auto;
+    white-space: pre-wrap;
+}

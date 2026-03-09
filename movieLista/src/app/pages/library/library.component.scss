@@ -27,4 +27,16 @@
     justify-content: space-between;
     align-items: center;
     gap: 12px;
+    color: #ffffff;
+    margin: 12px;
+}
+
+.books-section {
+    margin-top: 16px;
+    padding-top: 12px;
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.books-section h3 {
+    margin: 0 0 6px;
 }

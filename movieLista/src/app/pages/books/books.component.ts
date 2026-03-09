@@ -34,6 +34,7 @@ export class BooksComponent {
     loading = signal(false);
     error = signal<string | null>(null);
     results = signal<GoogleBookVolume[]>([]);
+    selected = signal<GoogleBookVolume | null>(null);
 
     constructor(private books: GoogleBooksService) {}
 
@@ -47,6 +48,7 @@ export class BooksComponent {
 
         this.loading.set(true);
         this.error.set(null);
+        this.selected.set(null);
 
         this.books
             .searchBooks(query)
@@ -68,6 +70,16 @@ export class BooksComponent {
             });
     }
 
+    onSelected(item: GoogleBookVolume) {
+        this.selected.set(item);
+        this.queryCtrl.setValue('');
+        this.results.set([]);
+    }
+
+    clearSelection() {
+        this.selected.set(null);
+    }
+
     coverUrl(item: GoogleBookVolume) {
         return item.volumeInfo?.imageLinks?.thumbnail ?? null;
     }
@@ -79,5 +91,31 @@ export class BooksComponent {
     yearText(item: GoogleBookVolume) {
         const date = item.volumeInfo?.publishedDate ?? '';
         return date ? date.slice(0, 4) : '-';
+    }
+
+    ratingText(item: GoogleBookVolume) {
+        const avg = item.volumeInfo?.averageRating;
+        if (avg == null) return '-';
+        const count = item.volumeInfo?.ratingsCount;
+        return count ? `${avg} (${count})` : String(avg);
+    }
+
+    categoriesText(item: GoogleBookVolume) {
+        return item.volumeInfo?.categories?.join(', ') ?? '-';
+    }
+
+    identifiersText(item: GoogleBookVolume) {
+        const ids = item.volumeInfo?.industryIdentifiers;
+        if (!ids?.length) return '-';
+        return ids.map((x) => `${x.type}: ${x.identifier}`).join(', ');
+    }
+
+    linksText(item: GoogleBookVolume) {
+        return (
+            item.volumeInfo?.canonicalVolumeLink ||
+            item.volumeInfo?.infoLink ||
+            item.volumeInfo?.previewLink ||
+            ''
+        );
     }
 }

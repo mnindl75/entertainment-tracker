@@ -9,6 +9,7 @@
                 type="text"
                 [formControl]="queryCtrl"
                 placeholder="Type at least 3 characters"
+                (keyup.enter)="search()"
             />
         </mat-form-field>
 
@@ -22,7 +23,12 @@
         <div class="error" *ngIf="error()">{{ error() }}</div>
 
         <mat-list *ngIf="results().length">
-            <mat-list-item *ngFor="let item of results()">
+            <mat-list-item
+                *ngFor="let item of results()"
+                (click)="onSelected(item)"
+                class="mat-mdc-list-item-interactive"
+                tabindex="0"
+            >
                 <img matListItemAvatar *ngIf="coverUrl(item) as url" [src]="url" alt="" />
                 <div matListItemTitle>{{ item.volumeInfo?.title || 'Untitled' }}</div>
                 <div matListItemLine>
@@ -31,5 +37,43 @@
                 </div>
             </mat-list-item>
         </mat-list>
+
+        <mat-card class="selected" *ngIf="selected() as s">
+            <mat-card-title>{{ s.volumeInfo?.title || 'Untitled' }}</mat-card-title>
+            <mat-card-subtitle>
+                {{ authorsText(s) }} · {{ yearText(s) }} ·
+                {{ s.volumeInfo?.language?.toUpperCase() || 'N/A' }}
+            </mat-card-subtitle>
+
+            <img *ngIf="coverUrl(s) as url" [src]="url" alt="" class="cover" />
+
+            <div class="details">
+                <div><b>Subtitle:</b> {{ s.volumeInfo?.subtitle || '-' }}</div>
+                <div><b>Publisher:</b> {{ s.volumeInfo?.publisher || '-' }}</div>
+                <div><b>Pages:</b> {{ s.volumeInfo?.pageCount ?? '-' }}</div>
+                <div><b>Genres:</b> {{ categoriesText(s) }}</div>
+                <div><b>Rating:</b> {{ ratingText(s) }}</div>
+                <div><b>Identifiers:</b> {{ identifiersText(s) }}</div>
+                <div><b>Print type:</b> {{ s.volumeInfo?.printType || '-' }}</div>
+                <div><b>Maturity:</b> {{ s.volumeInfo?.maturityRating || '-' }}</div>
+            </div>
+
+            <p *ngIf="s.volumeInfo?.description" class="description">
+                {{ s.volumeInfo?.description }}
+            </p>
+
+            <div *ngIf="linksText(s) as link" class="link">
+                <a [href]="link" target="_blank" rel="noopener">Open in Google Books</a>
+            </div>
+
+            <details class="all-info">
+                <summary>All available info</summary>
+                <pre>{{ s.volumeInfo | json }}</pre>
+            </details>
+
+            <mat-card-actions align="end">
+                <button mat-button (click)="clearSelection()">Clear</button>
+            </mat-card-actions>
+        </mat-card>
     </mat-card-content>
 </mat-card>
