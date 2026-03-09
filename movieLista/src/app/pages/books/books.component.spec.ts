@@ -25,6 +25,7 @@ describe('BooksComponent', () => {
                     provide: BooksStore,
                     useValue: {
                         add: () => undefined,
+                        toggleRead: () => undefined,
                     },
                 },
             ],

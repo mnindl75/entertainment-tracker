@@ -70,12 +70,16 @@
                         <div class="title">{{ book.title }} ({{ bookYearText(book.year) }})</div>
                         <div class="meta">
                             {{ bookAuthorsText(book.authors) }} ·
-                            {{ book.language?.toUpperCase() || 'N/A' }} ·
-                            Rating: {{ bookRatingText(book.ratingAverage, book.ratingCount) }}
+                            {{ book.language?.toUpperCase() || 'N/A' }} · Rating:
+                            {{ bookRatingText(book.ratingAverage, book.ratingCount) }} ·
+                            {{ book.read ? 'read' : 'not read' }}
                         </div>
                     </div>
 
                     <div class="actions">
+                        <button mat-button (click)="toggleBookRead(book.id)">
+                            {{ book.read ? 'Mark not read' : 'Mark read' }}
+                        </button>
                         <a mat-button [routerLink]="['/books', book.id]">Details</a>
                         <button mat-button (click)="removeBook(book.id)">Remove</button>
                     </div>

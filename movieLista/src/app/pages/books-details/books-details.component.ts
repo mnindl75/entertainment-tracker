@@ -16,7 +16,13 @@ import { toBookItem } from '../../core/books.types';
 @Component({
     selector: 'app-books-details',
     standalone: true,
-    imports: [CommonModule, MatCardModule, MatButtonModule, MatIconModule, MatProgressSpinnerModule],
+    imports: [
+        CommonModule,
+        MatCardModule,
+        MatButtonModule,
+        MatIconModule,
+        MatProgressSpinnerModule,
+    ],
     templateUrl: './books-details.component.html',
     styleUrl: './books-details.component.scss',
 })
@@ -29,10 +35,9 @@ export class BooksDetailsComponent {
     loading = signal(false);
     error = signal<string | null>(null);
 
-    params = toSignal(
-        this.route.paramMap.pipe(map((pm) => ({ id: pm.get('id') ?? '' }))),
-        { initialValue: { id: '' } },
-    );
+    params = toSignal(this.route.paramMap.pipe(map((pm) => ({ id: pm.get('id') ?? '' }))), {
+        initialValue: { id: '' },
+    });
 
     storeItem = computed(() => {
         const id = this.params().id;
@@ -114,5 +119,11 @@ export class BooksDetailsComponent {
             item?.volumeInfo?.previewLink ||
             ''
         );
+    }
+
+    toggleRead() {
+        const s = this.storeItem();
+        if (!s) return;
+        this.booksStore.toggleRead(s.id);
     }
 }

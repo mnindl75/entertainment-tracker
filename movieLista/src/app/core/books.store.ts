@@ -39,6 +39,10 @@ export class BooksStore {
         this._items.set(this._items().filter((x) => x.id !== id));
     }
 
+    toggleRead(id: string) {
+        this._items.set(this._items().map((x) => (x.id === id ? { ...x, read: !x.read } : x)));
+    }
+
     clear() {
         this._items.set([]);
     }

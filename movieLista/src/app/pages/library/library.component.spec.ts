@@ -55,6 +55,7 @@ describe('LibraryComponent', () => {
                         itemById: () => new Map(),
                         count: () => 0,
                         remove: () => undefined,
+                        toggleRead: () => undefined,
                         clear: () => undefined,
                     },
                 },

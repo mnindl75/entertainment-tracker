@@ -95,6 +95,10 @@ export class LibraryComponent {
         this.books.remove(id);
     }
 
+    toggleBookRead(id: string) {
+        this.books.toggleRead(id);
+    }
+
     clearBooks() {
         this.books.clear();
     }

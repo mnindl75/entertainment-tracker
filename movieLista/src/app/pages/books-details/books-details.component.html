@@ -18,6 +18,12 @@
             <img *ngIf="coverUrl(d) as url" [src]="url" alt="" class="cover" />
 
             <div class="meta">
+                <div *ngIf="storeItem() as s">
+                    <b>Status:</b> {{ s.read ? 'read' : 'not read' }}
+                    <button mat-button (click)="toggleRead()">
+                        {{ s.read ? 'Mark not read' : 'Mark read' }}
+                    </button>
+                </div>
                 <div><b>Authors:</b> {{ authorsText(d) }}</div>
                 <div><b>Year:</b> {{ yearText(d) }}</div>
                 <div><b>Language:</b> {{ d.volumeInfo?.language?.toUpperCase() || 'N/A' }}</div>
@@ -37,24 +43,14 @@
             </div>
         </ng-container>
 
-        <div *ngIf="!details() && !loading() && !error()" class="error">
-            No details found.
-        </div>
+        <div *ngIf="!details() && !loading() && !error()" class="error">No details found.</div>
 
         <mat-card-actions align="end">
             <button mat-button (click)="close()">Back</button>
-            <button
-                mat-button
-                *ngIf="storeItem()"
-                (click)="removeFromLibrary()"
-            >
+            <button mat-button *ngIf="storeItem()" (click)="removeFromLibrary()">
                 Remove from library
             </button>
-            <button
-                mat-raised-button
-                *ngIf="!storeItem() && details()"
-                (click)="addToLibrary()"
-            >
+            <button mat-raised-button *ngIf="!storeItem() && details()" (click)="addToLibrary()">
                 Add to library
             </button>
         </mat-card-actions>

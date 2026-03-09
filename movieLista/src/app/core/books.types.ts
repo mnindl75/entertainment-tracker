@@ -13,6 +13,7 @@ export type BookItem = {
     ratingCount?: number | null;
     coverUrl?: string | null;
     addedAt: string; // ISO date
+    read: boolean;
 };
 
 export function toBookItem(b: GoogleBookVolume): BookItem {
@@ -33,5 +34,6 @@ export function toBookItem(b: GoogleBookVolume): BookItem {
         ratingCount: info.ratingsCount ?? null,
         coverUrl: info.imageLinks?.thumbnail ?? null,
         addedAt: new Date().toISOString(),
+        read: false,
     };
 }
