@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
+import { provideRouter } from '@angular/router';
 import { ActivatedRoute, convertToParamMap } from '@angular/router';
 import { of } from 'rxjs';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
@@ -14,8 +14,9 @@ describe('LibraryComponent', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            imports: [RouterTestingModule.withRoutes([]), LibraryComponent],
+            imports: [LibraryComponent],
             providers: [
+                provideRouter([]),
                 {
                     provide: MatBottomSheet,
                     useValue: {
