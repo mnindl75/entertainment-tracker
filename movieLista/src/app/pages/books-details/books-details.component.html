@@ -24,6 +24,18 @@
                         {{ s.read ? 'Mark not read' : 'Mark read' }}
                     </button>
                 </div>
+                <div *ngIf="storeItem() as s">
+                    <b>My rating:</b>
+                    <button
+                        mat-button
+                        *ngFor="let star of [1, 2, 3, 4, 5]"
+                        (click)="setRating(star)"
+                        [disabled]="!s.read"
+                    >
+                        {{ (s.userRating ?? 0) >= star ? '★' : '☆' }}
+                    </button>
+                    <span *ngIf="s.userRating">{{ starText(s.userRating) }}</span>
+                </div>
                 <div><b>Authors:</b> {{ authorsText(d) }}</div>
                 <div><b>Year:</b> {{ yearText(d) }}</div>
                 <div><b>Language:</b> {{ d.volumeInfo?.language?.toUpperCase() || 'N/A' }}</div>

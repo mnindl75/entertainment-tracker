@@ -126,4 +126,20 @@ export class BooksDetailsComponent {
         if (!s) return;
         this.booksStore.toggleRead(s.id);
     }
+
+    setRating(stars: number) {
+        const s = this.storeItem();
+        if (!s || !s.read) return;
+        if (s.userRating === stars) {
+            this.booksStore.setRating(s.id, null);
+            return;
+        }
+        this.booksStore.setRating(s.id, stars);
+    }
+
+    starText(rating: number | null | undefined, max = 5) {
+        if (!rating || rating < 1) return '';
+        const full = Math.min(max, Math.max(1, Math.round(rating)));
+        return '★'.repeat(full) + '☆'.repeat(Math.max(0, max - full));
+    }
 }

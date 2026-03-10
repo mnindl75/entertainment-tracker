@@ -43,6 +43,15 @@ export class BooksStore {
         this._items.set(this._items().map((x) => (x.id === id ? { ...x, read: !x.read } : x)));
     }
 
+    setRating(id: string, rating: number | null) {
+        const normalized = rating == null ? null : Math.min(5, Math.max(1, Math.round(rating)));
+        this._items.set(
+            this._items().map((x) =>
+                x.id === id ? { ...x, userRating: normalized, read: normalized ? true : x.read } : x,
+            ),
+        );
+    }
+
     clear() {
         this._items.set([]);
     }
