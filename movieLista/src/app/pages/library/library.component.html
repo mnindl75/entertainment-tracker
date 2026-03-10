@@ -91,4 +91,58 @@
             </ng-template>
         </div>
     </mat-card-content>
+
+    <mat-card-content>
+        <div class="books-section">
+            <div class="books-header">
+                <h3>Games ({{ games.count() }})</h3>
+                <button mat-button (click)="clearGames()" [disabled]="!games.items().length">
+                    Clear games
+                </button>
+            </div>
+
+            <div *ngIf="games.items().length; else emptyGames">
+                <div class="books-row" *ngFor="let game of games.items()">
+                    <div class="books-main">
+                        <div class="title">{{ game.title }} ({{ game.year || '-' }})</div>
+                        <div class="meta">
+                            {{ game.genres.length ? game.genres.join(', ') : '-' }} ·
+                            {{ game.played ? 'played' : 'not played' }}
+                            <span *ngIf="game.ratingAverage != null">
+                                · Rating: {{ game.ratingAverage | number: '1.1-1' }}
+                                <span *ngIf="game.ratingCount != null"
+                                    >({{ game.ratingCount | number }})</span
+                                >
+                            </span>
+                            <span *ngIf="game.userRating != null">
+                                · My rating: {{ starText(game.userRating) }}
+                            </span>
+                        </div>
+                        <div class="meta">
+                            <button
+                                mat-button
+                                *ngFor="let star of [1, 2, 3, 4, 5]"
+                                (click)="setGameRating(game.id, star)"
+                                [disabled]="!game.played"
+                            >
+                                {{ game.userRating && game.userRating >= star ? '★' : '☆' }}
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="actions">
+                        <button mat-button (click)="toggleGamePlayed(game.id)">
+                            {{ game.played ? 'Mark not played' : 'Mark played' }}
+                        </button>
+                        <a mat-button [routerLink]="['/games', game.id]">Details</a>
+                        <button mat-button (click)="removeGame(game.id)">Remove</button>
+                    </div>
+                </div>
+            </div>
+
+            <ng-template #emptyGames>
+                <p>No games yet. Add some from the Games page.</p>
+            </ng-template>
+        </div>
+    </mat-card-content>
 </mat-card>

@@ -1,0 +1,26 @@
+.row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.error {
+    color: #b00020;
+    margin: 8px 0;
+}
+
+.cover {
+    width: 100%;
+    max-width: 480px;
+    border-radius: 8px;
+    margin: 12px 0;
+}
+
+.meta {
+    display: grid;
+    gap: 6px;
+}
+
+.description {
+    margin-top: 12px;
+}

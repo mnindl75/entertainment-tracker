@@ -28,4 +28,15 @@ export const routes: Routes = [
         path: 'books',
         loadComponent: () => import('./pages/books/books.component').then((m) => m.BooksComponent),
     },
+    {
+        path: 'games/:id',
+        loadComponent: () =>
+            import('./pages/games-details/games-details.component').then(
+                (m) => m.GamesDetailsComponent,
+            ),
+    },
+    {
+        path: 'games',
+        loadComponent: () => import('./pages/games/games.component').then((m) => m.GamesComponent),
+    },
 ];

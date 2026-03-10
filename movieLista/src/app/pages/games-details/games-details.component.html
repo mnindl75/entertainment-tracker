@@ -1,0 +1,67 @@
+<mat-card>
+    <mat-card-header>
+        <button mat-icon-button class="close" (click)="close()" aria-label="Close">
+            <mat-icon>close</mat-icon>
+        </button>
+        <mat-card-title>{{ titleText() }}</mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+        <div *ngIf="loading()" class="row">
+            <mat-progress-spinner diameter="24" mode="indeterminate"></mat-progress-spinner>
+            <span>Loading...</span>
+        </div>
+
+        <div *ngIf="error()" class="error">{{ error() }}</div>
+
+        <ng-container *ngIf="details() as d">
+            <img *ngIf="d.background_image as url" [src]="url" alt="" class="cover" />
+
+            <div class="meta">
+                <div *ngIf="storeItem() as s">
+                    <b>Status:</b> {{ s.played ? 'played' : 'not played' }}
+                    <button mat-button (click)="togglePlayed()">
+                        {{ s.played ? 'Mark not played' : 'Mark played' }}
+                    </button>
+                </div>
+                <div><b>Year:</b> {{ releaseYear(d) }}</div>
+                <div><b>Genres:</b> {{ genresText(d) }}</div>
+                <div><b>Platforms:</b> {{ platformsText(d) }}</div>
+                <div>
+                    <b>RAWG rating:</b> {{ d.rating ?? '-' }}
+                    <span *ngIf="d.ratings_count">({{ d.ratings_count }})</span>
+                </div>
+                <div *ngIf="storeItem() as s">
+                    <b>My rating:</b>
+                    <button
+                        mat-button
+                        *ngFor="let star of [1, 2, 3, 4, 5]"
+                        (click)="setRating(star)"
+                        [disabled]="!s.played"
+                    >
+                        {{ s.userRating && s.userRating >= star ? '★' : '☆' }}
+                    </button>
+                    <span *ngIf="s.userRating">{{ starText(s.userRating) }}</span>
+                </div>
+            </div>
+
+            <p *ngIf="d.description_raw" class="description">{{ d.description_raw }}</p>
+
+            <div *ngIf="d.website" class="link">
+                <a [href]="d.website" target="_blank" rel="noopener">Official website</a>
+            </div>
+        </ng-container>
+
+        <div *ngIf="!details() && !loading() && !error()" class="error">No details found.</div>
+
+        <mat-card-actions align="end">
+            <button mat-button (click)="close()">Back</button>
+            <button mat-button *ngIf="storeItem()" (click)="removeFromLibrary()">
+                Remove from library
+            </button>
+            <button mat-raised-button *ngIf="!storeItem() && details()" (click)="addToLibrary()">
+                Add to library
+            </button>
+        </mat-card-actions>
+    </mat-card-content>
+</mat-card>

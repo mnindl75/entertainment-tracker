@@ -2,6 +2,7 @@ import { Component, computed, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LibraryStore } from '../../core/library.store';
 import { BooksStore } from '../../core/books.store';
+import { GamesStore } from '../../core/games.store';
 
 import { MatCardModule } from '@angular/material/card';
 import { MatListModule } from '@angular/material/list';
@@ -34,6 +35,7 @@ export class LibraryComponent {
     constructor(
         public library: LibraryStore,
         public books: BooksStore,
+        public games: GamesStore,
         private bottomSheet: MatBottomSheet,
     ) {}
 
@@ -101,6 +103,28 @@ export class LibraryComponent {
 
     clearBooks() {
         this.books.clear();
+    }
+
+    removeGame(id: string) {
+        this.games.remove(id);
+    }
+
+    toggleGamePlayed(id: string) {
+        this.games.togglePlayed(id);
+    }
+
+    clearGames() {
+        this.games.clear();
+    }
+
+    setGameRating(id: string, rating: number) {
+        const item = this.games.itemById().get(id);
+        if (!item || !item.played) return;
+        if (item.userRating === rating) {
+            this.games.setRating(id, null);
+            return;
+        }
+        this.games.setRating(id, rating);
     }
 
     bookAuthorsText(authors: string[]) {

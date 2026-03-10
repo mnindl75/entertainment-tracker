@@ -1,0 +1,61 @@
+<mat-card>
+    <mat-card-title>Games (RAWG)</mat-card-title>
+
+    <mat-card-content>
+        <mat-form-field appearance="outline" class="full">
+            <mat-label>Game title</mat-label>
+            <input
+                matInput
+                type="text"
+                [formControl]="queryCtrl"
+                placeholder="Type at least 2 characters"
+                (keyup.enter)="search()"
+            />
+        </mat-form-field>
+
+        <button mat-raised-button (click)="search()">Search</button>
+
+        <div class="row" *ngIf="loading()">
+            <mat-progress-spinner diameter="24" mode="indeterminate"></mat-progress-spinner>
+            <span>Loading...</span>
+        </div>
+
+        <div class="error" *ngIf="error()">{{ error() }}</div>
+
+        <mat-list *ngIf="results().length">
+            <mat-list-item
+                *ngFor="let item of results()"
+                (click)="onSelected(item)"
+                class="mat-mdc-list-item-interactive"
+                tabindex="0"
+            >
+                <img matListItemAvatar *ngIf="item.background_image as url" [src]="url" alt="" />
+                <div matListItemTitle>{{ item.name || 'Untitled' }}</div>
+                <div matListItemLine>
+                    {{ releaseYear(item) }} · {{ genresText(item) }}
+                </div>
+            </mat-list-item>
+        </mat-list>
+
+        <mat-card class="selected" *ngIf="selected() as s">
+            <mat-card-title>{{ s.name || 'Untitled' }}</mat-card-title>
+            <mat-card-subtitle>
+                {{ releaseYear(s) }} · Rating: {{ s.rating ?? '-' }}
+                <span *ngIf="s.ratings_count">({{ s.ratings_count }})</span>
+            </mat-card-subtitle>
+
+            <img *ngIf="s.background_image as url" [src]="url" alt="" class="cover" />
+
+            <div class="details">
+                <div><b>Genres:</b> {{ genresText(s) }}</div>
+                <div><b>Platforms:</b> {{ platformsText(s) }}</div>
+            </div>
+
+            <mat-card-actions align="end">
+                <button mat-button (click)="clearSelection()">Clear</button>
+                <a mat-button [routerLink]="['/games', s.id]">Details</a>
+                <button mat-raised-button (click)="addToLibrary(s)">Add to library</button>
+            </mat-card-actions>
+        </mat-card>
+    </mat-card-content>
+</mat-card>
