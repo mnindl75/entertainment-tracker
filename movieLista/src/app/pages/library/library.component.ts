@@ -117,6 +117,16 @@ export class LibraryComponent {
         this.games.clear();
     }
 
+    setBookRating(id: string, rating: number) {
+        const item = this.books.itemById().get(id);
+        if (!item || !item.read) return;
+        if (item.userRating === rating) {
+            this.books.setRating(id, null);
+            return;
+        }
+        this.books.setRating(id, rating);
+    }
+
     setGameRating(id: string, rating: number) {
         const item = this.games.itemById().get(id);
         if (!item || !item.played) return;

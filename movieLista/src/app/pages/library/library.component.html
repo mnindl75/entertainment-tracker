@@ -70,9 +70,23 @@
                         <div class="title">{{ book.title }} ({{ bookYearText(book.year) }})</div>
                         <div class="meta">
                             {{ bookAuthorsText(book.authors) }} ·
-                            {{ book.language?.toUpperCase() || 'N/A' }} · Rating:
+                            {{ book.language.toUpperCase() || 'N/A' }} · Rating:
                             {{ bookRatingText(book.ratingAverage, book.ratingCount) }} ·
                             {{ book.read ? 'read' : 'not read' }}
+                            <span *ngIf="book.userRating != null">
+                                · My rating: {{ starText(book.userRating) }}
+                            </span>
+                        </div>
+
+                        <div class="meta">
+                            <button
+                                mat-button
+                                *ngFor="let star of [1, 2, 3, 4, 5]"
+                                (click)="setBookRating(book.id, star)"
+                                [disabled]="!book.read"
+                            >
+                                {{ (book.userRating ?? 0) >= star ? '★' : '☆' }}
+                            </button>
                         </div>
                     </div>
 
@@ -125,7 +139,7 @@
                                 (click)="setGameRating(game.id, star)"
                                 [disabled]="!game.played"
                             >
-                                {{ game.userRating && game.userRating >= star ? '★' : '☆' }}
+                                {{ (game.userRating ?? 0) >= star ? '★' : '☆' }}
                             </button>
                         </div>
                     </div>
