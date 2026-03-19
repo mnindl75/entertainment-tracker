@@ -1,66 +1,71 @@
 <mat-card>
     <mat-card-title class="title-row">
-        <span>Library ({{ library.count() }})</span>
-        <button mat-button (click)="openSortSheet()">Sort</button>
+        <span>Bibliothek</span>
     </mat-card-title>
-
-    <mat-card-content *ngIf="library.items().length; else empty">
-        <div class="row" *ngFor="let item of sortedItems()">
-            <div class="main">
-                <div class="title">{{ item.title }} ({{ item.year }})</div>
-
-                <div class="meta">
-                    <mat-chip-set>
-                        <mat-chip>{{ item.type }}</mat-chip>
-                        <mat-chip [disabled]="true">{{ item.seen ? 'seen' : 'not seen' }}</mat-chip>
-                        <mat-chip *ngIf="item.ratingAverage != null">
-                            ★ {{ item.ratingAverage | number: '1.1-1' }}
-                            <span *ngIf="item.ratingCount != null"
-                                >({{ item.ratingCount | number }})</span
-                            >
-                        </mat-chip>
-                        <mat-chip *ngIf="item.userRating != null">
-                            My rating: {{ starText(item.userRating) }}
-                        </mat-chip>
-                    </mat-chip-set>
-                </div>
-            </div>
-
-            <div class="actions">
-                <button mat-button (click)="toggleSeen(item.imdbID)">
-                    {{ item.seen ? 'Mark not seen' : 'Mark seen' }}
-                </button>
-                <button mat-button (click)="remove(item.imdbID)">Remove</button>
-                <a
-                    mat-button
-                    [routerLink]="[
-                        '/details',
-                        item.type === 'series' ? 'tv' : 'movie',
-                        item.imdbID,
-                    ]"
-                >
-                    Details
-                </a>
-            </div>
-        </div>
-
-        <div class="footer">
-            <button mat-button (click)="clear()">Clear all</button>
-        </div>
-    </mat-card-content>
-
-    <ng-template #empty>
-        <mat-card-content>
-            <p>No items yet. Go to Search and add some movies/series.</p>
-        </mat-card-content>
-    </ng-template>
 
     <mat-card-content>
         <div class="books-section">
             <div class="books-header">
-                <h3>Books ({{ books.count() }})</h3>
+                <h3>Filme &amp; Serien ({{ library.count() }})</h3>
+                <button mat-button (click)="openSortSheet()">Sortieren</button>
+                <button mat-button (click)="clear()" [disabled]="!library.items().length">
+                    Alle entfernen
+                </button>
+            </div>
+
+            <div *ngIf="library.items().length; else empty">
+                <div class="books-row" *ngFor="let item of sortedItems()">
+                    <div class="books-main">
+                        <div class="title">{{ item.title }} ({{ item.year }})</div>
+
+                        <div class="meta">
+                            <mat-chip-set>
+                                <mat-chip>{{ item.type === 'series' ? 'Serie' : 'Film' }}</mat-chip>
+                                <mat-chip [disabled]="true">{{ item.seen ? 'gesehen' : 'nicht gesehen' }}</mat-chip>
+                                <mat-chip *ngIf="item.ratingAverage != null">
+                                    ★ {{ item.ratingAverage | number: '1.1-1' }}
+                                    <span *ngIf="item.ratingCount != null"
+                                        >({{ item.ratingCount | number }})</span
+                                    >
+                                </mat-chip>
+                                <mat-chip *ngIf="item.userRating != null">
+                                    Meine Wertung: {{ starText(item.userRating) }}
+                                </mat-chip>
+                            </mat-chip-set>
+                        </div>
+                    </div>
+
+                    <div class="actions">
+                        <button mat-button (click)="toggleSeen(item.imdbID)">
+                            {{ item.seen ? 'Als nicht gesehen markieren' : 'Als gesehen markieren' }}
+                        </button>
+                        <button mat-button (click)="remove(item.imdbID)">Entfernen</button>
+                        <a
+                            mat-button
+                            [routerLink]="[
+                                '/details',
+                                item.type === 'series' ? 'tv' : 'movie',
+                                item.imdbID,
+                            ]"
+                        >
+                            Details
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <ng-template #empty>
+                <p>Noch keine Einträge. Gehe zur Suche und füge Filme oder Serien hinzu.</p>
+            </ng-template>
+        </div>
+    </mat-card-content>
+
+    <mat-card-content>
+        <div class="books-section">
+            <div class="books-header">
+                <h3>Bücher ({{ books.count() }})</h3>
                 <button mat-button (click)="clearBooks()" [disabled]="!books.items().length">
-                    Clear books
+                    Alle entfernen
                 </button>
             </div>
 
@@ -70,11 +75,11 @@
                         <div class="title">{{ book.title }} ({{ bookYearText(book.year) }})</div>
                         <div class="meta">
                             {{ bookAuthorsText(book.authors) }} ·
-                            {{ book.language.toUpperCase() || 'N/A' }} · Rating:
+                            {{ book.language.toUpperCase() || 'N/A' }} · Wertung:
                             {{ bookRatingText(book.ratingAverage, book.ratingCount) }} ·
-                            {{ book.read ? 'read' : 'not read' }}
+                            {{ book.read ? 'gelesen' : 'nicht gelesen' }}
                             <span *ngIf="book.userRating != null">
-                                · My rating: {{ starText(book.userRating) }}
+                                · Meine Wertung: {{ starText(book.userRating) }}
                             </span>
                         </div>
 
@@ -92,16 +97,16 @@
 
                     <div class="actions">
                         <button mat-button (click)="toggleBookRead(book.id)">
-                            {{ book.read ? 'Mark not read' : 'Mark read' }}
+                            {{ book.read ? 'Als nicht gelesen markieren' : 'Als gelesen markieren' }}
                         </button>
                         <a mat-button [routerLink]="['/books', book.id]">Details</a>
-                        <button mat-button (click)="removeBook(book.id)">Remove</button>
+                        <button mat-button (click)="removeBook(book.id)">Entfernen</button>
                     </div>
                 </div>
             </div>
 
             <ng-template #emptyBooks>
-                <p>No books yet. Add some from the Books page.</p>
+                <p>Noch keine Bücher. Füge welche auf der Bücher-Seite hinzu.</p>
             </ng-template>
         </div>
     </mat-card-content>
@@ -109,9 +114,9 @@
     <mat-card-content>
         <div class="books-section">
             <div class="books-header">
-                <h3>Games ({{ games.count() }})</h3>
+                <h3>Spiele ({{ games.count() }})</h3>
                 <button mat-button (click)="clearGames()" [disabled]="!games.items().length">
-                    Clear games
+                    Alle entfernen
                 </button>
             </div>
 
@@ -121,15 +126,15 @@
                         <div class="title">{{ game.title }} ({{ game.year || '-' }})</div>
                         <div class="meta">
                             {{ game.genres.length ? game.genres.join(', ') : '-' }} ·
-                            {{ game.played ? 'played' : 'not played' }}
+                            {{ game.played ? 'gespielt' : 'nicht gespielt' }}
                             <span *ngIf="game.ratingAverage != null">
-                                · Rating: {{ game.ratingAverage | number: '1.1-1' }}
+                                · Wertung: {{ game.ratingAverage | number: '1.1-1' }}
                                 <span *ngIf="game.ratingCount != null"
                                     >({{ game.ratingCount | number }})</span
                                 >
                             </span>
                             <span *ngIf="game.userRating != null">
-                                · My rating: {{ starText(game.userRating) }}
+                                · Meine Wertung: {{ starText(game.userRating) }}
                             </span>
                         </div>
                         <div class="meta">
@@ -146,16 +151,16 @@
 
                     <div class="actions">
                         <button mat-button (click)="toggleGamePlayed(game.id)">
-                            {{ game.played ? 'Mark not played' : 'Mark played' }}
+                            {{ game.played ? 'Als nicht gespielt markieren' : 'Als gespielt markieren' }}
                         </button>
                         <a mat-button [routerLink]="['/games', game.id]">Details</a>
-                        <button mat-button (click)="removeGame(game.id)">Remove</button>
+                        <button mat-button (click)="removeGame(game.id)">Entfernen</button>
                     </div>
                 </div>
             </div>
 
             <ng-template #emptyGames>
-                <p>No games yet. Add some from the Games page.</p>
+                <p>Noch keine Spiele. Füge welche auf der Spiele-Seite hinzu.</p>
             </ng-template>
         </div>
     </mat-card-content>
