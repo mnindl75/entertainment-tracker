@@ -95,7 +95,7 @@ export class GamesDetailsComponent {
     }
 
     close() {
-        this.router.navigateByUrl('/library');
+        void this.router.navigateByUrl('/library');
     }
 
     releaseYear(item?: RawgGame | null) {

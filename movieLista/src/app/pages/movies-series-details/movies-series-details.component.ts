@@ -165,7 +165,7 @@ export class MoviesSeriesDetailsComponent {
     });
 
     close() {
-        this.router.navigateByUrl('/library');
+        void this.router.navigateByUrl('/library');
     }
 }
 

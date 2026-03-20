@@ -79,7 +79,7 @@ export class BooksDetailsComponent {
     }
 
     close() {
-        this.router.navigateByUrl('/library');
+        void this.router.navigateByUrl('/library');
     }
 
     coverUrl(item?: GoogleBookVolume | null) {
