@@ -3,9 +3,11 @@ import { Routes } from '@angular/router';
 export const routes: Routes = [
     { path: '', redirectTo: 'library', pathMatch: 'full' },
     {
-        path: 'search',
+        path: 'movies-series',
         loadComponent: () =>
-            import('./pages/search/search.component').then((m) => m.SearchComponent),
+            import('./pages/movies-series/movies-series.component').then(
+                (m) => m.MoviesSeriesComponent,
+            ),
     },
     {
         path: 'library',
@@ -13,9 +15,11 @@ export const routes: Routes = [
             import('./pages/library/library.component').then((m) => m.LibraryComponent),
     },
     {
-        path: 'details/:mediaType/:id',
+        path: 'movies-series-details/:mediaType/:id',
         loadComponent: () =>
-            import('./pages/details/details.component').then((m) => m.DetailsComponent),
+            import('./pages/movies-series-details/movies-series-details.component').then(
+                (m) => m.MoviesSeriesDetailsComponent,
+            ),
     },
     {
         path: 'books/:id',

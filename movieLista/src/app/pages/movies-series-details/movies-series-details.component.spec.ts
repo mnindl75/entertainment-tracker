@@ -3,14 +3,14 @@ import { signal } from '@angular/core';
 import { convertToParamMap } from '@angular/router';
 import { of } from 'rxjs';
 
-import { DetailsComponent } from './details.component';
+import { MoviesSeriesDetailsComponent } from './movies-series-details.component';
 import { TmdbApiService } from '../../core/tmdb-api.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LibraryStore } from '../../core/library.store';
 
-describe('DetailsComponent', () => {
-    let component: DetailsComponent;
-    let fixture: ComponentFixture<DetailsComponent>;
+describe('MoviesSeriesDetailsComponent', () => {
+    let component: MoviesSeriesDetailsComponent;
+    let fixture: ComponentFixture<MoviesSeriesDetailsComponent>;
     let libraryStoreMock: {
         itemById: ReturnType<typeof signal<Map<string, any>>>;
         setRating: (imdbId: string, rating: number) => void;
@@ -41,7 +41,7 @@ describe('DetailsComponent', () => {
         };
 
         await TestBed.configureTestingModule({
-            imports: [DetailsComponent],
+            imports: [MoviesSeriesDetailsComponent],
             providers: [
                 {
                     provide: ActivatedRoute,
@@ -81,7 +81,7 @@ describe('DetailsComponent', () => {
             ],
         }).compileComponents();
 
-        fixture = TestBed.createComponent(DetailsComponent);
+        fixture = TestBed.createComponent(MoviesSeriesDetailsComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
     });
@@ -133,3 +133,4 @@ describe('DetailsComponent', () => {
         expect(firstStar.disabled).toBeTrue();
     }));
 });
+

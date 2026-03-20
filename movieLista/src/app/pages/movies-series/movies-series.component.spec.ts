@@ -2,16 +2,16 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { of } from 'rxjs';
 
-import { SearchComponent } from './search.component';
+import { MoviesSeriesComponent } from './movies-series.component';
 import { TmdbApiService } from '../../core/tmdb-api.service';
 
-describe('SearchComponent', () => {
-    let component: SearchComponent;
-    let fixture: ComponentFixture<SearchComponent>;
+describe('MoviesSeriesComponent', () => {
+    let component: MoviesSeriesComponent;
+    let fixture: ComponentFixture<MoviesSeriesComponent>;
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            imports: [NoopAnimationsModule, SearchComponent],
+            imports: [NoopAnimationsModule, MoviesSeriesComponent],
             providers: [
                 {
                     provide: TmdbApiService,
@@ -23,7 +23,7 @@ describe('SearchComponent', () => {
             ],
         }).compileComponents();
 
-        fixture = TestBed.createComponent(SearchComponent);
+        fixture = TestBed.createComponent(MoviesSeriesComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
     });
@@ -49,3 +49,4 @@ describe('SearchComponent', () => {
         expect(compiled.textContent).toContain('1,234');
     });
 });
+

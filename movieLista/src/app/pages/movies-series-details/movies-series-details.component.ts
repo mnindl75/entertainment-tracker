@@ -29,7 +29,7 @@ type Details =
     | { mediaType: 'tv'; data: TmdbTvDetails };
 
 @Component({
-    selector: 'app-details',
+    selector: 'app-movies-series-details',
     standalone: true,
     imports: [
         CommonModule,
@@ -43,10 +43,10 @@ type Details =
         MatIconModule,
         MatButtonModule,
     ],
-    templateUrl: './details.component.html',
-    styleUrl: './details.component.scss',
+    templateUrl: './movies-series-details.component.html',
+    styleUrl: './movies-series-details.component.scss',
 })
-export class DetailsComponent {
+export class MoviesSeriesDetailsComponent {
     private route = inject(ActivatedRoute);
     private tmdb = inject(TmdbApiService);
     private library = inject(LibraryStore);
@@ -57,7 +57,6 @@ export class DetailsComponent {
 
     readonly stars = [1, 2, 3, 4, 5] as const;
 
-    // Route params -> Signal
     params = toSignal(
         this.route.paramMap.pipe(
             map((pm) => {
@@ -69,7 +68,6 @@ export class DetailsComponent {
         { initialValue: { mediaType: 'movie' as MediaType, id: 0 } },
     );
 
-    // Details -> Signal
     details = toSignal(
         toObservable(this.params).pipe(
             tap(() => {
@@ -98,7 +96,6 @@ export class DetailsComponent {
         { initialValue: null as Details | null },
     );
 
-    // --- TV season handling ---
     selectedSeason = signal<number>(1);
 
     tvDetails = computed<TmdbTvDetails | null>(() => {
@@ -123,7 +120,6 @@ export class DetailsComponent {
 
     private lastTvId = 0;
 
-    // Auto-set season to 1 when TV details load
     constructor() {
         effect(() => {
             const currentTvId = this.tvId();
@@ -172,3 +168,4 @@ export class DetailsComponent {
         this.router.navigateByUrl('/library');
     }
 }
+

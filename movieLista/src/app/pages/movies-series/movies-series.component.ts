@@ -16,7 +16,7 @@ import { LibraryStore } from '../../core/library.store';
 import { toLibraryItem } from '../../core/library.types';
 
 @Component({
-    selector: 'app-search',
+    selector: 'app-movies-series',
     standalone: true,
     imports: [
         CommonModule,
@@ -28,10 +28,10 @@ import { toLibraryItem } from '../../core/library.types';
         MatProgressSpinnerModule,
         MatButtonModule,
     ],
-    templateUrl: './search.component.html',
-    styleUrl: './search.component.scss',
+    templateUrl: './movies-series.component.html',
+    styleUrl: './movies-series.component.scss',
 })
-export class SearchComponent {
+export class MoviesSeriesComponent {
     titleCtrl = new FormControl<string>('', { nonNullable: true });
 
     loading = signal(false);
@@ -105,8 +105,6 @@ export class SearchComponent {
 
     onSelected(item: SearchItem) {
         this.selected.set(item);
-
-        // Input leeren + Vorschläge weg
         this.titleCtrl.setValue('');
         this.results.set([]);
     }
@@ -128,3 +126,4 @@ export class SearchComponent {
         return path ? `https://image.tmdb.org/t/p/w185${path}` : null;
     }
 }
+
