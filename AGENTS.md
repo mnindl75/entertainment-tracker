@@ -23,9 +23,17 @@ environments/
 ```
 
 ### Routing (`app.routes.ts`)
-Default redirect → `/library`. All routes use `loadComponent` (lazy). Detail routes:
-- `/details/:mediaType/:id` – movie or TV
-- `/books/:id`, `/games/:id` – book / game details
+Default redirect → `/library`. All routes use `loadComponent` (lazy).
+
+| Path | Component |
+|------|-----------|
+| `/movies-series` | `MoviesSeriesComponent` – TMDB search (auto-search via `valueChanges`) |
+| `/books` | `BooksComponent` – Google Books search (manual button trigger) |
+| `/games` | `GamesComponent` – RAWG search (manual button trigger) |
+| `/library` | `LibraryComponent` – combined watchlist/reading list/game list |
+| `/movies-series-details/:mediaType/:id` | `MoviesSeriesDetailsComponent` – movie or TV details |
+| `/books/:id` | `BooksDetailsComponent` – book details |
+| `/games/:id` | `GamesDetailsComponent` – game details |
 
 ## State Management Pattern
 Each media domain has a **Signal Store** in `core/`:
@@ -44,11 +52,11 @@ All stores follow the same shape:
 Components inject stores directly and read via `store.items()` / `store.count()`.
 
 ## External API Services (`core/`)
-| Service | API | Auth |
-|---------|-----|------|
-| `TmdbApiService` | TMDB v3 (`https://api.themoviedb.org/3`) | Bearer token via `tmdbAuthInterceptor` |
-| `GoogleBooksService` | Google Books v1 | API key as query param |
-| `GamesApiService` | RAWG (`https://api.rawg.io/api`) | API key as query param |
+| Service              | API                                      | Auth                                   |
+|----------------------|------------------------------------------|----------------------------------------|
+| `TmdbApiService`     | TMDB v3 (`https://api.themoviedb.org/3`) | Bearer token via `tmdbAuthInterceptor` |
+| `GoogleBooksService` | Google Books v1                          | API key as query param                 |
+| `GamesApiService`    | RAWG (`https://api.rawg.io/api`)         | API key as query param                 |
 
 **Important:** `tmdb-auth.interceptor.ts` only injects headers for requests whose URL starts with `environment.tmdbBaseUrl`. Non-TMDB requests pass through unchanged.
 
@@ -58,9 +66,14 @@ TMDB searches use `language=de-DE` and `region=DE`. Google Books searches defaul
 - **Standalone components everywhere** – always add `standalone: true` and list all imports explicitly.
 - **Signals for local component state** – use `signal()` / `computed()`, not `BehaviorSubject`.
 - **Dependency injection mixed style** – constructor injection in older components, `inject()` in newer ones (e.g. `GamesApiService`). Both are acceptable.
-- **Type mapper functions** live in `*.types.ts` files (e.g. `toLibraryItem()` in `library.types.ts`, `toGameItem()` in `games.types.ts`). Use these when saving API results to a store.
+- **Type mapper functions** live in `*.types.ts` files (e.g. `toLibraryItem()` in `library.types.ts`, `toBookItem()` in `books.types.ts`, `toGameItem()` in `games.types.ts`). Use these when saving API results to a store.
 - **`LibraryItem.imdbID`** stores TMDB numeric IDs cast to string (`String(m.id)`).
 - **Angular Material** is the sole UI component library (cards, lists, buttons, icons, chips, bottom-sheet).
+- **TMDB API types** (`TmdbMovieDetails`, `TmdbTvDetails`, `TmdbSeasonDetails`, etc.) are exported directly from `tmdb-api.service.ts`, not a separate types file. `GoogleBookVolume` / `GoogleBooksResponse` are likewise exported from `google-books.service.ts`.
+- **TMDB image URLs**: construct poster/backdrop URLs as `https://image.tmdb.org/t/p/w185{path}` (search cards) or `https://image.tmdb.org/t/p/w342{path}` (detail pages).
+- **Detail page pattern** – all `*-details` components use `inject()`, derive `params` with `toSignal(route.paramMap.pipe(...))`, and fetch via `toSignal(toObservable(params).pipe(switchMap(...)))` from `@angular/core/rxjs-interop`. A `storeItem = computed(() => store.itemById().get(id) ?? null)` tracks whether the item is already saved.
+- **`LibrarySortSheetComponent`** lives in `pages/library/library-sort-sheet.component.ts` with an inline template (no separate HTML file). It is opened via `MatBottomSheet` and returns a `SortOption` on dismiss.
+- **Legacy `MovieApiService`** (`core/movie-api.service.ts`) wraps the OMDB API and is no longer used by any component. Do not inject it in new code. The matching `omdbApiKey` / `omdbBaseUrl` keys in `environments.ts` are also unused.
 - When adding a new media domain, mirror the existing store pattern and add a `localStorage` key with a `v1` suffix.
 
 ## Adding a New Route / Domain
