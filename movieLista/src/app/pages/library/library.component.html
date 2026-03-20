@@ -33,6 +33,17 @@
                                 </mat-chip>
                             </mat-chip-set>
                         </div>
+
+                        <div class="meta">
+                            <button
+                                mat-button
+                                *ngFor="let star of [1, 2, 3, 4, 5]"
+                                (click)="setMovieRating(item.imdbID, star)"
+                                [disabled]="!item.seen"
+                            >
+                                {{ (item.userRating ?? 0) >= star ? '★' : '☆' }}
+                            </button>
+                        </div>
                     </div>
 
                     <div class="actions">
@@ -74,13 +85,17 @@
                     <div class="books-main">
                         <div class="title">{{ book.title }} ({{ bookYearText(book.year) }})</div>
                         <div class="meta">
-                            {{ bookAuthorsText(book.authors) }} ·
-                            {{ book.language.toUpperCase() || 'N/A' }} · Rating:
-                            {{ bookRatingText(book.ratingAverage, book.ratingCount) }} ·
-                            {{ book.read ? 'read' : 'not read' }}
-                            <span *ngIf="book.userRating != null">
-                                · My rating: {{ starText(book.userRating) }}
-                            </span>
+                            <mat-chip-set>
+                                <mat-chip>{{ bookAuthorsText(book.authors) }}</mat-chip>
+                                <mat-chip>{{ book.language.toUpperCase() || 'N/A' }}</mat-chip>
+                                <mat-chip *ngIf="book.ratingAverage != null">
+                                    ★ {{ bookRatingText(book.ratingAverage, book.ratingCount) }}
+                                </mat-chip>
+                                <mat-chip [disabled]="true">{{ book.read ? 'read' : 'not read' }}</mat-chip>
+                                <mat-chip *ngIf="book.userRating != null">
+                                    My rating: {{ starText(book.userRating) }}
+                                </mat-chip>
+                            </mat-chip-set>
                         </div>
 
                         <div class="meta">
@@ -125,17 +140,19 @@
                     <div class="books-main">
                         <div class="title">{{ game.title }} ({{ game.year || '-' }})</div>
                         <div class="meta">
-                            {{ game.genres.length ? game.genres.join(', ') : '-' }} ·
-                            {{ game.played ? 'played' : 'not played' }}
-                            <span *ngIf="game.ratingAverage != null">
-                                · Rating: {{ game.ratingAverage | number: '1.1-1' }}
-                                <span *ngIf="game.ratingCount != null"
-                                    >({{ game.ratingCount | number }})</span
-                                >
-                            </span>
-                            <span *ngIf="game.userRating != null">
-                                · My rating: {{ starText(game.userRating) }}
-                            </span>
+                            <mat-chip-set>
+                                <mat-chip>{{ game.genres.length ? game.genres.join(', ') : '-' }}</mat-chip>
+                                <mat-chip [disabled]="true">{{ game.played ? 'played' : 'not played' }}</mat-chip>
+                                <mat-chip *ngIf="game.ratingAverage != null">
+                                    ★ {{ game.ratingAverage | number: '1.1-1' }}
+                                    <span *ngIf="game.ratingCount != null"
+                                        >({{ game.ratingCount | number }})</span
+                                    >
+                                </mat-chip>
+                                <mat-chip *ngIf="game.userRating != null">
+                                    My rating: {{ starText(game.userRating) }}
+                                </mat-chip>
+                            </mat-chip-set>
                         </div>
                         <div class="meta">
                             <button

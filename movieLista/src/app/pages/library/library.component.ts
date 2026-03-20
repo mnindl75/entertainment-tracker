@@ -89,6 +89,16 @@ export class LibraryComponent {
         this.library.toggleSeen(imdbID);
     }
 
+    setMovieRating(imdbID: string, rating: number) {
+        const item = this.library.itemById().get(imdbID);
+        if (!item || !item.seen) return;
+        if (item.userRating === rating) {
+            this.library.setRating(imdbID, null);
+            return;
+        }
+        this.library.setRating(imdbID, rating);
+    }
+
     clear() {
         this.library.clear();
     }
