@@ -45,10 +45,35 @@ jobs:
 
       - name: Inject API keys
         working-directory: movieLista
+        env:
+          TMDB_TOKEN: ${{ secrets.TMDB_TOKEN }}
+          GOOGLE_BOOKS_API_KEY: ${{ secrets.GOOGLE_BOOKS_API_KEY }}
+          RAWG_API_KEY: ${{ secrets.RAWG_API_KEY }}
         run: |
-          sed -i "s|tmdbToken:.*|tmdbToken: '${{ secrets.TMDB_TOKEN }}',|" environments/environments.ts
-          sed -i "s|googleBooksApiKey:.*|googleBooksApiKey: '${{ secrets.GOOGLE_BOOKS_API_KEY }}',|" environments/environments.ts
-          sed -i "s|rawgApiKey:.*|rawgApiKey: '${{ secrets.RAWG_API_KEY }}'|" environments/environments.ts
+          node <<'NODE'
+          const fs = require('fs');
+          const filePath = 'environments/environments.ts';
+          let content = fs.readFileSync(filePath, 'utf8');
+
+          const replaceKey = (key, value) => {
+            const escaped = String(value ?? '')
+              .replace(/\\/g, '\\\\')
+              .replace(/'/g, "\\'");
+            const pattern = new RegExp(`(${key}:\\s*)'[^']*'`, 's');
+
+            if (!pattern.test(content)) {
+              throw new Error(`Key not found in ${filePath}: ${key}`);
+            }
+
+            content = content.replace(pattern, `$1'${escaped}'`);
+          };
+
+          replaceKey('tmdbToken', process.env.TMDB_TOKEN);
+          replaceKey('googleBooksApiKey', process.env.GOOGLE_BOOKS_API_KEY);
+          replaceKey('rawgApiKey', process.env.RAWG_API_KEY);
+
+          fs.writeFileSync(filePath, content);
+          NODE
 
       - name: Build (production)
         working-directory: movieLista
