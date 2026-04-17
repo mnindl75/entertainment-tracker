@@ -6,6 +6,16 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
 
+## Local API keys (safe setup)
+
+The tracked file `environments/environments.ts` contains only placeholders and must stay secret-free.
+
+1. Copy `environments/environments.local.example.ts` to `environments/environments.local.ts`
+2. Add your local API keys to `environments/environments.local.ts`
+3. Start local development with `npm run start:local`
+
+`environments/environments.local.ts` is gitignored and must never be committed.
+
 ## Code scaffolding
 
 Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.

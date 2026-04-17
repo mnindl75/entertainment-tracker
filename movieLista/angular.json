@@ -57,6 +57,17 @@
               "optimization": false,
               "extractLicenses": false,
               "sourceMap": true
+            },
+            "local": {
+              "optimization": false,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "fileReplacements": [
+                {
+                  "replace": "environments/environments.ts",
+                  "with": "environments/environments.local.ts"
+                }
+              ]
             }
           },
           "defaultConfiguration": "production"
@@ -69,6 +80,9 @@
             },
             "development": {
               "buildTarget": "movieLista:build:development"
+            },
+            "local": {
+              "buildTarget": "movieLista:build:local"
             }
           },
           "defaultConfiguration": "development"
