@@ -16,6 +16,17 @@ The tracked file `environments/environments.ts` contains only placeholders and m
 
 `environments/environments.local.ts` is gitignored and must never be committed.
 
+## Security baseline (CI)
+
+A dedicated workflow scans every push/PR for leaked secrets:
+- Workflow: `.github/workflows/secret-scan.yml`
+- Scanner: Gitleaks
+
+If the workflow fails:
+1. Remove the secret from tracked files.
+2. Rotate/revoke the affected key/token.
+3. Push a fix commit and rerun the workflow.
+
 ## Code scaffolding
 
 Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
