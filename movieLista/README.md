@@ -27,6 +27,16 @@ If the workflow fails:
 2. Rotate/revoke the affected key/token.
 3. Push a fix commit and rerun the workflow.
 
+## CI/CD baseline (GitHub)
+
+Workflows:
+- `.github/workflows/ci.yml` -> separate `Test` and `Build` jobs (artifact: `dist`)
+- `.github/workflows/deploy.yml` -> deploys to GitHub Pages from the CI artifact
+
+Recommended branch protection for `main`:
+- Require status checks: `Test`, `Build`, `Secret Scan`
+- Restrict direct pushes (PR only)
+
 ## Code scaffolding
 
 Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.

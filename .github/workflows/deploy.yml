@@ -1,19 +1,18 @@
-name: Deploy – GitHub Pages
+name: Deploy - GitHub Pages
 
 on:
-  # Nur deployen wenn CI auf main erfolgreich war
   workflow_run:
-    workflows: ["CI – Build & Test"]
+    workflows: ["CI - Build & Test"]
     types: [completed]
     branches: [main]
+  workflow_dispatch:
 
-# GitHub Pages benötigt diese Rechte
 permissions:
+  actions: read
   contents: read
   pages: write
   id-token: write
 
-# Gleichzeitige Deployments verhindern
 concurrency:
   group: pages
   cancel-in-progress: false
@@ -22,17 +21,27 @@ jobs:
   deploy:
     name: Deploy to GitHub Pages
     runs-on: ubuntu-latest
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
 
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
 
     steps:
-      - name: Checkout repository
+      - name: Download CI artifact
+        if: ${{ github.event_name == 'workflow_run' }}
+        uses: dawidd6/action-download-artifact@v6
+        with:
+          run_id: ${{ github.event.workflow_run.id }}
+          name: dist
+          path: site
+
+      - name: Build fallback for manual run
+        if: ${{ github.event_name == 'workflow_dispatch' }}
         uses: actions/checkout@v4
 
       - name: Setup Node.js
+        if: ${{ github.event_name == 'workflow_dispatch' }}
         uses: actions/setup-node@v4
         with:
           node-version: 20
@@ -40,10 +49,12 @@ jobs:
           cache-dependency-path: movieLista/package-lock.json
 
       - name: Install dependencies
+        if: ${{ github.event_name == 'workflow_dispatch' }}
         working-directory: movieLista
         run: npm ci
 
       - name: Inject API keys
+        if: ${{ github.event_name == 'workflow_dispatch' }}
         working-directory: movieLista
         env:
           TMDB_TOKEN: ${{ secrets.TMDB_TOKEN }}
@@ -75,13 +86,19 @@ jobs:
           fs.writeFileSync(filePath, content);
           NODE
 
-      - name: Build (production)
+      - name: Build (manual fallback)
+        if: ${{ github.event_name == 'workflow_dispatch' }}
         working-directory: movieLista
         run: npm run build -- --base-href=/${{ github.event.repository.name }}/
 
-      # SPA-Fix: 404 → index.html weiterleiten (Angular Router funktioniert so auf GitHub Pages)
+      - name: Copy fallback artifact
+        if: ${{ github.event_name == 'workflow_dispatch' }}
+        run: |
+          mkdir -p site
+          cp -r movieLista/dist/movie-lista/browser/. site/
+
       - name: Copy index.html as 404.html
-        run: cp movieLista/dist/movie-lista/browser/index.html movieLista/dist/movie-lista/browser/404.html
+        run: cp site/index.html site/404.html
 
       - name: Setup GitHub Pages
         uses: actions/configure-pages@v5
@@ -89,7 +106,7 @@ jobs:
       - name: Upload to GitHub Pages
         uses: actions/upload-pages-artifact@v3
         with:
-          path: movieLista/dist/movie-lista/browser
+          path: site
 
       - name: Deploy to GitHub Pages
         id: deployment
