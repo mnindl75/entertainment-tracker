@@ -73,7 +73,6 @@ TMDB searches use `language=de-DE` and `region=DE`. Google Books searches defaul
 - **TMDB image URLs**: construct poster/backdrop URLs as `https://image.tmdb.org/t/p/w185{path}` (search cards) or `https://image.tmdb.org/t/p/w342{path}` (detail pages).
 - **Detail page pattern** – all `*-details` components use `inject()`, derive `params` with `toSignal(route.paramMap.pipe(...))`, and fetch via `toSignal(toObservable(params).pipe(switchMap(...)))` from `@angular/core/rxjs-interop`. A `storeItem = computed(() => store.itemById().get(id) ?? null)` tracks whether the item is already saved.
 - **`LibrarySortSheetComponent`** lives in `pages/library/library-sort-sheet.component.ts` with an inline template (no separate HTML file). It is opened via `MatBottomSheet` and returns a `SortOption` on dismiss.
-- **Legacy `MovieApiService`** (`core/movie-api.service.ts`) wraps the OMDB API and is no longer used by any component. Do not inject it in new code. The matching `omdbApiKey` / `omdbBaseUrl` keys in `environments.ts` are also unused.
 - When adding a new media domain, mirror the existing store pattern and add a `localStorage` key with a `v1` suffix.
 
 ## Adding a New Route / Domain

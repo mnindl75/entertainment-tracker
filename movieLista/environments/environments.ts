@@ -1,7 +1,5 @@
 export const environment = {
     production: false,
-    omdbApiKey: '',
-    omdbBaseUrl: 'https://www.omdbapi.com',
     tmdbApiKey: '',
     tmdbToken: '',
     tmdbBaseUrl: 'https://api.themoviedb.org/3',
