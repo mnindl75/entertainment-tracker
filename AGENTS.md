@@ -5,7 +5,8 @@ Angular 18 standalone-component app for tracking **movies/TV** (TMDB), **books**
 
 ## Developer Workflows
 ```bash
-npm start          # dev server → http://localhost:4200
+npm start          # local dev server (uses `build:local` / `environments.local.ts`) → http://localhost:4200
+npm run start:local # explicit local dev server (same as `npm start`)
 npm run build      # production build → dist/
 npm test           # Jasmine/Karma in ChromeHeadlessNoSandbox (watch=false)
 npm run watch      # build in watch mode (development)
@@ -19,7 +20,9 @@ src/app/
   pages/         # Lazy-loaded route components (one folder per route)
   shared/        # (currently empty – reusable UI components go here)
 environments/
-  environments.ts  # Single env file (no prod variant) – all API keys live here
+  environments.ts                # tracked placeholder values only (no real keys)
+  environments.local.ts          # local real keys via `build:local`, must stay untracked
+  environments.local.example.ts  # template for local setup
 ```
 
 ### Routing (`app.routes.ts`)
@@ -64,6 +67,7 @@ TMDB searches use `language=de-DE` and `region=DE`. Google Books searches defaul
 
 ## Key Conventions
 - **Standalone components everywhere** – always add `standalone: true` and list all imports explicitly.
+- **Local secrets stay local** – never commit `environments/environments.local.ts`; keep real API keys only in that untracked local file and in GitHub Actions secrets.
 - **Signals for local component state** – use `signal()` / `computed()`, not `BehaviorSubject`.
 - **Dependency injection mixed style** – constructor injection in older components, `inject()` in newer ones (e.g. `GamesApiService`). Both are acceptable.
 - **Type mapper functions** live in `*.types.ts` files (e.g. `toLibraryItem()` in `library.types.ts`, `toBookItem()` in `books.types.ts`, `toGameItem()` in `games.types.ts`). Use these when saving API results to a store.
@@ -80,4 +84,3 @@ TMDB searches use `language=de-DE` and `region=DE`. Google Books searches defaul
 2. Add pages under `pages/<domain>/` and `pages/<domain>-details/`
 3. Register lazy routes in `app.routes.ts`
 4. Inject the new store in `library.component.ts` if it should appear on the Library page
-
