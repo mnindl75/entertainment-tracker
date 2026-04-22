@@ -6,7 +6,8 @@ Angular 18 standalone-component app for tracking **movies/TV** (TMDB), **books**
 ## Developer Workflows
 ```bash
 npm start          # dev server → http://localhost:4200
-npm run build      # production build → dist/
+npm run start:local # dev server with local env replacement (environments.local.ts)
+npm run build      # production build → dist/movie-lista
 npm test           # Jasmine/Karma in ChromeHeadlessNoSandbox (watch=false)
 npm run watch      # build in watch mode (development)
 ```
@@ -19,7 +20,9 @@ src/app/
   pages/         # Lazy-loaded route components (one folder per route)
   shared/        # (currently empty – reusable UI components go here)
 environments/
-  environments.ts  # Single env file (no prod variant) – all API keys live here
+  environments.ts                # committed placeholders only (no secrets)
+  environments.local.example.ts  # local key template
+  environments.local.ts          # gitignored local keys, used by --configuration local
 ```
 
 ### Routing (`app.routes.ts`)
@@ -71,7 +74,7 @@ TMDB searches use `language=de-DE` and `region=DE`. Google Books searches defaul
 - **Angular Material** is the sole UI component library (cards, lists, buttons, icons, chips, bottom-sheet).
 - **TMDB API types** (`TmdbMovieDetails`, `TmdbTvDetails`, `TmdbSeasonDetails`, etc.) are exported directly from `tmdb-api.service.ts`, not a separate types file. `GoogleBookVolume` / `GoogleBooksResponse` are likewise exported from `google-books.service.ts`.
 - **TMDB image URLs**: construct poster/backdrop URLs as `https://image.tmdb.org/t/p/w185{path}` (search cards) or `https://image.tmdb.org/t/p/w342{path}` (detail pages).
-- **Detail page pattern** – all `*-details` components use `inject()`, derive `params` with `toSignal(route.paramMap.pipe(...))`, and fetch via `toSignal(toObservable(params).pipe(switchMap(...)))` from `@angular/core/rxjs-interop`. A `storeItem = computed(() => store.itemById().get(id) ?? null)` tracks whether the item is already saved.
+- **Detail page pattern** – all `*-details` components use `inject()`, derive `params` with `toSignal(route.paramMap.pipe(...))`, and fetch via `toSignal(toObservable(params).pipe(switchMap(...)))` from `@angular/core/rxjs-interop`. A store-backed computed (`storeItem` in books/games, `libraryItem` in movies/series) tracks whether the item is already saved.
 - **`LibrarySortSheetComponent`** lives in `pages/library/library-sort-sheet.component.ts` with an inline template (no separate HTML file). It is opened via `MatBottomSheet` and returns a `SortOption` on dismiss.
 - When adding a new media domain, mirror the existing store pattern and add a `localStorage` key with a `v1` suffix.
 
