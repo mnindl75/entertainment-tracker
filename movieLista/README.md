@@ -12,9 +12,10 @@ The tracked file `environments/environments.ts` contains only placeholders and m
 
 1. Copy `environments/environments.local.example.ts` to `environments/environments.local.ts`
 2. Add your local API keys to `environments/environments.local.ts`
-3. Start local development with `npm run start:local`
+3. Start local development with `npm run dev` (or `npm run start:local`)
 
 `environments/environments.local.ts` is gitignored and must never be committed.
+`npm start` uses placeholder values from `environments/environments.ts`.
 
 ## Security baseline (CI)
 
