@@ -1,3 +1,10 @@
+## PR-Typ
+- [ ] Feature
+- [ ] Bugfix
+- [ ] Refactor
+- [ ] Hotfix
+- [ ] Doku/Chore
+
 ## Was wurde geaendert?
 - 
 
@@ -27,6 +34,13 @@ Kurze Testnotizen:
 - [ ] `Test` erfolgreich
 - [ ] `Build` erfolgreich
 - [ ] `Secret Scan` erfolgreich
+
+## Hotfix (nur bei Bedarf)
+- Issue/Incident:
+- Impact:
+- Root Cause:
+- Risk level: [ ] Low  [ ] Medium  [ ] High
+- Rollback plan:
 
 ## GitHub Pages / Deploy
 - [ ] Keine Deploy-Auswirkung
