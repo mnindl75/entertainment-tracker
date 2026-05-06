@@ -6,8 +6,14 @@
     "start": "ng serve --configuration local",
     "start:local": "ng serve --configuration local",
     "build": "ng build",
+    "build:development": "ng build --configuration development",
+    "build:local": "ng build --configuration local",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test --watch=false --browsers=ChromeHeadlessNoSandbox"
+    "test": "ng test --watch=false --browsers=ChromeHeadlessNoSandbox",
+    "e2e": "npm run build:development && playwright test",
+    "e2e:local-development": "npm run e2e",
+    "e2e:headed": "playwright test --headed",
+    "e2e:ui": "playwright test --ui"
   },
   "private": true,
   "dependencies": {
@@ -29,6 +35,8 @@
     "@angular-devkit/build-angular": "18.2.21",
     "@angular/cli": "18.2.21",
     "@angular/compiler-cli": "18.2.14",
+    "@playwright/test": "^1.59.1",
+    "http-server": "^14.1.1",
     "@types/jasmine": "~5.1.0",
     "jasmine-core": "~5.2.0",
     "karma": "~6.4.0",

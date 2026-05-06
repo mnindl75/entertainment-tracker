@@ -51,7 +51,11 @@ Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.
 
 ## Running end-to-end tests
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+Playwright is configured in `playwright.config.ts` with smoke tests in `e2e/smoke.spec.ts`.
+
+1. Install browser binaries once: `npx playwright install chromium`
+2. Run headless E2E tests with local development build: `npm run e2e:local-development`
+3. Optional debug modes: `npm run e2e:headed` or `npm run e2e:ui`
 
 ## Further help
 
